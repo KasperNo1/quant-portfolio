@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kasper Ge — Quant Learning Portfolio</title>
+<style>
+:root{--bg:#0a0a0a;--surface:#111;--surface2:#1a1a1a;--border:#222;--text:#e8e8e8;--muted:#666;--accent:#4A7FE8;--green:#2D9E6B;--orange:#E87D3E;--purple:#9B6FD4;--red:#E84A6F;--yellow:#E8B84A}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6}
+nav{position:sticky;top:0;z-index:100;background:rgba(10,10,10,.95);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;backdrop-filter:blur(8px)}
+.nav-logo{font-size:15px;font-weight:600}.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:2rem}.nav-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}.nav-links a:hover{color:var(--text)}
+.hero{padding:6rem 2rem 4rem;max-width:900px;margin:0 auto}
+.hero-tag{font-size:12px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem}
+.hero h1{font-size:clamp(32px,5vw,52px);font-weight:700;line-height:1.1;margin-bottom:1.25rem}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero-desc{font-size:16px;color:var(--muted);max-width:580px;line-height:1.7;margin-bottom:2rem}
+.hero-stats{display:flex;gap:2.5rem;flex-wrap:wrap}
+.hstat-v{font-size:28px;font-weight:700}.hstat-l{font-size:12px;color:var(--muted);margin-top:2px}
+.progress-wrap{margin-top:2rem}.progress-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
+.progress-track{height:4px;background:var(--surface2);border-radius:100px;overflow:hidden}
+.progress-fill{height:100%;border-radius:100px;background:var(--accent);transition:width 1s ease}
+section{padding:4rem 2rem;max-width:900px;margin:0 auto;border-top:1px solid var(--border)}
+.sec-label{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+.sec-title{font-size:24px;font-weight:600;margin-bottom:2rem}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:1.5rem}
+.tab{font-size:13px;padding:8px 14px;cursor:pointer;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit;transition:color .2s}
+.tab:hover{color:var(--text)}.tab.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.subj{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px}
+.subj-header{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer}.subj-header:hover{background:var(--surface2)}
+.subj-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.subj-info{flex:1;min-width:0}.subj-name{font-size:14px;font-weight:600}.subj-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.subj-pct{font-size:13px;font-weight:600;color:var(--accent)}
+.subj-bar{height:3px;background:var(--surface2)}.subj-bar-fill{height:100%;transition:width .4s}
+.topics{display:none;padding:10px 16px;border-top:1px solid var(--border)}.topics.open{display:block}
+.topic{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);cursor:pointer}.topic:last-child{border-bottom:none}
+.chk{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.chk.done{background:var(--accent);border-color:var(--accent)}.chk.done::after{content:'';width:7px;height:4px;border-left:1.5px solid white;border-bottom:1.5px solid white;transform:rotate(-45deg) translateY(-1px);display:block}
+.topic-name{font-size:13px;flex:1}.topic-name.done{color:var(--muted);text-decoration:line-through}
+.tag{font-size:10px;padding:2px 8px;border-radius:100px}
+.tag-interview{background:rgba(232,184,74,.15);color:var(--yellow)}.tag-project{background:rgba(45,158,107,.15);color:var(--green)}.tag-core{background:rgba(74,127,232,.15);color:var(--accent)}
+.expand-btn{font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;padding:3px 0 0 26px;display:flex;align-items:center;gap:4px;margin-top:2px}.expand-btn:hover{color:var(--text)}
+.lesson{display:none;margin:6px 0 4px 26px;padding:12px;background:var(--surface2);border-radius:8px;border-left:2px solid var(--accent)}.lesson.open{display:block}
+.lsec{font-size:10px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;margin-top:10px}.lsec:first-child{margin-top:0}
+.ltext{font-size:12px;color:#aaa;line-height:1.6}
+.lcode{font-family:'SF Mono','Fira Code',monospace;font-size:11px;background:#000;padding:10px;border-radius:6px;color:#ccc;white-space:pre-wrap;margin-top:4px;overflow-x:auto}
+.note-area{width:100%;background:#000;border:1px solid var(--border);border-radius:6px;padding:8px;font-size:12px;color:var(--text);font-family:inherit;resize:vertical;min-height:60px;margin-top:8px;line-height:1.5}
+.note-area::placeholder{color:var(--muted)}.save-btn{margin-top:6px;font-size:11px;padding:4px 12px;border-radius:6px;background:var(--accent);color:white;border:none;cursor:pointer}
+.saved-msg{font-size:11px;color:var(--green);margin-left:8px;display:none}
+.proj{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px}
+.proj-header{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;cursor:pointer}.proj-header:hover{background:var(--surface2)}
+.proj-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.proj-info{flex:1}.proj-title{font-size:14px;font-weight:600}.proj-desc{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.5}
+.proj-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.proj-status{font-size:11px;padding:3px 10px;border-radius:100px;flex-shrink:0}
+.st-done{background:rgba(45,158,107,.15);color:var(--green)}.st-prog{background:rgba(232,184,74,.15);color:var(--yellow)}.st-todo{background:var(--surface2);color:var(--muted)}
+.proj-body{display:none;padding:14px 16px;border-top:1px solid var(--border)}.proj-body.open{display:block}
+.step-list{list-style:none;margin:8px 0 14px}.step{font-size:12px;color:#aaa;padding:4px 0 4px 16px;position:relative;line-height:1.5}.step::before{content:'→';position:absolute;left:0;color:var(--muted)}
+.proj-note{width:100%;background:#000;border:1px solid var(--border);border-radius:6px;padding:8px;font-size:12px;color:var(--text);font-family:inherit;resize:vertical;min-height:80px;margin-top:8px;line-height:1.5}
+.proj-note::placeholder{color:var(--muted)}
+.sec-label2{font-size:10px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin:10px 0 4px}
+.j-input{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.j-input textarea{width:100%;background:none;border:none;outline:none;font-size:13px;color:var(--text);font-family:inherit;resize:none;min-height:70px;line-height:1.6}
+.j-input textarea::placeholder{color:var(--muted)}
+.j-actions{display:flex;gap:8px;margin-top:8px;align-items:center}
+.j-sel{font-size:12px;padding:5px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:inherit;cursor:pointer}
+.j-save{font-size:12px;padding:5px 14px;border-radius:6px;background:var(--accent);color:white;border:none;cursor:pointer;font-family:inherit}
+.j-entry{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.j-date{font-size:11px;color:var(--muted);margin-bottom:5px;display:flex;align-items:center;gap:8px}
+.j-text{font-size:13px;color:#ccc;line-height:1.6}
+.empty{text-align:center;padding:2rem;color:var(--muted);font-size:13px}
+.res-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:8px}
+.res-title{font-size:14px;font-weight:600;margin-bottom:4px}.res-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.res-tip{font-size:11px;color:#555;margin-top:8px;font-style:italic}
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-size:12px;color:var(--muted)}
+.gre-panel{display:none}.gre-panel.on{display:block}
+.roadmap-phase{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.rp-header{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer}.rp-header:hover{background:var(--surface2)}
+.rp-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.rp-info{flex:1}.rp-title{font-size:14px;font-weight:600}.rp-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.rp-body{display:none;padding:12px 16px;border-top:1px solid var(--border)}.rp-body.open{display:block}
+.gre-topic{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden}
+.gt-header{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer}.gt-header:hover{background:var(--surface2)}
+.gt-body{display:none;padding:10px 14px;border-top:1px solid var(--border)}.gt-body.open{display:block}
+.word-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:6px;display:flex;align-items:center;gap:12px}
+.word-en{font-size:14px;font-weight:600;color:var(--text);min-width:140px}
+.word-zh{font-size:13px;color:var(--muted);flex:1}
+.word-del{font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;padding:3px 8px}.word-del:hover{color:#E84A6F}
+@media(max-width:600px){nav{padding:0 1rem}.nav-links{gap:1rem}.hero{padding:4rem 1rem 2rem}section{padding:2rem 1rem}.hero-stats{gap:1.5rem}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">Kasper <span>Ge</span></div>
+  <div class="nav-links">
+    <a href="#curriculum">Curriculum</a>
+    <a href="#projects">Projects</a>
+    <a href="#gre">GRE</a>
+    <a href="#journal">Journal</a>
+    <a href="#resume">Resume</a>
+  </div>
+</nav>
+<div class="hero">
+  <div class="hero-tag">Quant Learning Portfolio</div>
+  <h1>Building toward<br><em>top quant firms</em><br>&amp; US grad programs</h1>
+  <p class="hero-desc">Self-directed quantitative finance education. Targeting trader / quant researcher roles at Optiver, Jane Street, Citadel. Applying to Columbia MFE, NYU MathFin, CMU MSCF.</p>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hstat-v" id="h-pct">0%</div><div class="hstat-l">Overall progress</div></div>
+    <div class="hstat"><div class="hstat-v" id="h-done">0</div><div class="hstat-l">Topics completed</div></div>
+    <div class="hstat"><div class="hstat-v" id="h-proj">0</div><div class="hstat-l">Projects active</div></div>
+    <div class="hstat"><div class="hstat-v" id="h-days">1</div><div class="hstat-l">Days in</div></div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Total curriculum progress</span><span id="h-pct2">0%</span></div>
+    <div class="progress-track"><div class="progress-fill" id="h-bar" style="width:0%"></div></div>
+  </div>
+</div>
+<section id="curriculum">
+  <div class="sec-label">Self-directed study</div>
+  <div class="sec-title">Curriculum</div>
+  <div class="tabs">
+    <button class="tab on" onclick="stab('all',this)">全部</button>
+    <button class="tab" onclick="stab('interview',this)">面试题</button>
+    <button class="tab" onclick="stab('project',this)">项目</button>
+    <button class="tab" onclick="stab('core',this)">基础</button>
+  </div>
+  <div id="subj-list"></div>
+</section>
+<section id="projects">
+  <div class="sec-label">Hands-on work</div>
+  <div class="sec-title">Projects</div>
+  <div id="proj-list"></div>
+</section>
+<section id="gre">
+  <div class="sec-label">Test prep</div>
+  <div class="sec-title">GRE — Target 325+</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.5rem">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px"><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Quant target</div><div style="font-size:22px;font-weight:700;color:#4A7FE8">170</div><div style="font-size:11px;color:var(--muted)">Perfect score</div></div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px"><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Verbal target</div><div style="font-size:22px;font-weight:700;color:#E87D3E">155+</div><div style="font-size:11px;color:var(--muted)">Top 30%</div></div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px"><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Exam date</div><div style="font-size:22px;font-weight:700;color:#2D9E6B" id="gre-days">~180d</div><div style="font-size:11px;color:var(--muted)">Dec 2026</div></div>
+  </div>
+  <div class="tabs" id="gre-tabs">
+    <button class="tab on" onclick="greTab('roadmap',this)">复习路径</button>
+    <button class="tab" onclick="greTab('quant',this)">Quant</button>
+    <button class="tab" onclick="greTab('verbal',this)">GRE词汇</button>
+    <button class="tab" onclick="greTab('quantwords',this)">量化词汇</button>
+    <button class="tab" onclick="greTab('finwords',this)">金融词汇</button>
+    <button class="tab" onclick="greTab('mywords',this)">我的单词本</button>
+  </div>
+  <div id="gre-roadmap" class="gre-panel on"><div id="roadmap-list"></div></div>
+  <div id="gre-quant" class="gre-panel"><div id="quant-list"></div></div>
+  <div id="gre-verbal" class="gre-panel">
+    <div id="vocab-stats" style="display:flex;gap:12px;margin-bottom:1rem"></div>
+    <div id="verbal-list"></div>
+  </div>
+  <div id="gre-quantwords" class="gre-panel">
+    <div id="qw-stats" style="display:flex;gap:12px;margin-bottom:1rem"></div>
+    <div id="quantword-list"></div>
+  </div>
+  <div id="gre-finwords" class="gre-panel">
+    <div id="fw-stats" style="display:flex;gap:12px;margin-bottom:1rem"></div>
+    <div id="finword-list"></div>
+  </div>
+  <div id="gre-mywords" class="gre-panel">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px">
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <input id="word-input" type="text" placeholder="单词（英文）" style="flex:1;font-size:13px;padding:6px 10px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:inherit">
+        <input id="word-def" type="text" placeholder="中文释义" style="flex:1.5;font-size:13px;padding:6px 10px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:inherit">
+        <button onclick="addWord()" style="font-size:12px;padding:6px 14px;border-radius:var(--radius);background:var(--fill-accent,#4A7FE8);color:white;border:none;cursor:pointer;font-family:inherit">添加</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted)">记录你遇到的生词，打勾标记已背</div>
+    </div>
+    <div id="word-list"></div>
+  </div>
+</section>
+<section id="journal">
+  <div class="sec-label">Daily log</div>
+  <div class="sec-title">学习日志</div>
+  <div class="j-input">
+    <textarea id="j-text" placeholder="今天学了什么？遇到什么困难？有什么顿悟？写下来..."></textarea>
+    <div class="j-actions">
+      <select class="j-sel" id="j-tag"><option>概率统计</option><option>Python</option><option>策略研究</option><option>数学</option><option>面试准备</option><option>项目</option><option>GRE</option><option>其他</option></select>
+      <button class="j-save" onclick="saveJ()">保存记录</button>
+    </div>
+  </div>
+  <div id="j-list"></div>
+</section>
+<section id="resume">
+  <div class="sec-label">Application materials</div>
+  <div class="sec-title">Resume &amp; Portfolio</div>
+  <div id="res-list"></div>
+</section>
+<footer>Kasper Ge · UNSW Finance · Building toward top quant programs · Started June 2026</footer>
+<script>
+const C=[
+{id:'prob',icon:'🎲',color:'#4A7FE8',title:'Probability & Statistics',desc:'Core of quant interviews',topics:[
+{id:'p1',n:'期望值 & 大数定律',tag:'interview',l:{c:'期望值=每种结果×其概率之和。大数定律：重复足够多次，实际均值趋近期望值。这是所有做市商策略的数学基础。',e:'硬币游戏：正面+2元，反面-1元。E=0.5×2+0.5×(-1)=+0.5元。每次期望赢0.5元。',code:'import random\nresults=[]\nfor i in range(10000):\n    results.append(2 if random.random()>0.5 else -1)\nprint(f"实际均值: {sum(results)/len(results):.4f}")'}},
+{id:'p2',n:'Kelly公式 & 仓位管理',tag:'interview',l:{c:'Kelly比例=(p×b-q)/b。这是在正期望值游戏中长期增长最快的押注比例。超过Kelly会导致破产。',e:'押25%→374亿；押50%→归零。方向对了但仓位错了，一样亏光。',code:'def kelly(p_win,odds):\n    return (p_win*odds-(1-p_win))/odds\nprint(f"最优押注: {kelly(0.5,2)*100:.1f}%")'}},
+{id:'p3',n:'条件概率 & 贝叶斯定理',tag:'interview',l:{c:'P(A|B)=P(B|A)×P(A)/P(B)。贝叶斯是用新证据更新已有信念的数学工具。面试高频题。',e:'疾病发病率1%，检测准确率99%。检测阳性，真正患病概率只有约50%，反直觉。',code:'p_d=0.01;p_p_d=0.99;p_p_h=0.01\np_p=p_p_d*p_d+p_p_h*(1-p_d)\nresult=p_p_d*p_d/p_p\nprint(f"阳性时患病率: {result:.1%}")'}},
+{id:'p4',n:'随机变量 & 常见分布',tag:'core',l:{c:'正态分布、泊松分布、二项分布。金融资产收益率近似正态分布，极端事件（肥尾）是例外。',e:'股票日收益率：均值约0，标准差约1-2%。2σ事件理论上2.3%概率，实际更频繁。',code:'import numpy as np\nreturns=np.random.normal(0,0.01,252)\nprint(f"年化收益: {returns.sum()*100:.2f}%")\nprint(f"年化波动: {returns.std()*np.sqrt(252)*100:.2f}%")'}},
+{id:'p5',n:'中心极限定理',tag:'core',l:{c:'无论原始分布如何，足够多独立同分布随机变量之和趋近正态分布。',e:'掷骰子单次均匀分布，但1000次之和几乎完美正态。',code:'import numpy as np\nsamples=[np.random.randint(1,7,100).sum() for _ in range(10000)]\nprint(f"均值: {np.mean(samples):.2f}")'}},
+{id:'p6',n:'蒙特卡洛模拟',tag:'project',l:{c:'用大量随机模拟估算复杂问题的概率分布。当数学解析解很难求时，模拟是强大替代工具。',e:'估算π：在单位正方形内随机撒点，落在内切圆内的比例×4≈π。',code:'import random\ndef estimate_pi(n):\n    inside=sum(1 for _ in range(n) if random.random()**2+random.random()**2<1)\n    return 4*inside/n\nprint(f"π ≈ {estimate_pi(1000000):.5f}")'}},
+{id:'p7',n:'假设检验 & p值',tag:'core',l:{c:'p<0.05意味着结果在零假设下出现概率<5%。用来验证策略是否真的有效而非运气。',e:'策略100次交易胜率60%，p=0.028，可以在5%水平拒绝零假设。',code:'from scipy import stats\nresult=stats.binomtest(60,100,0.5)\nprint(f"p值: {result.pvalue:.4f}")\nprint("显著" if result.pvalue<0.05 else "不显著")'}},
+{id:'p8',n:'相关性 & 协方差矩阵',tag:'core',l:{c:'相关系数∈[-1,1]，衡量两变量线性关系。协方差矩阵是构建投资组合的核心工具。',e:'黄金和美债通常负相关；同板块股票高度正相关。',code:'import numpy as np\ngold=np.random.normal(0,1,252)\nbond=-0.3*gold+np.random.normal(0,0.9,252)\nprint(f"相关性: {np.corrcoef(gold,bond)[0,1]:.3f}")'}}
+]},
+{id:'python',icon:'🐍',color:'#2D9E6B',title:'Python Programming',desc:'Zero to writing real quant strategies',topics:[
+{id:'py1',n:'变量、运算、print',tag:'core',l:{c:'变量是存储数据的容器。Python不需要声明类型，直接赋值即可。',e:'bankroll=100；bet=bankroll*0.25；print(bet)→25.0',code:'bankroll=500\nkelly_fraction=0.25\nbet=bankroll*kelly_fraction\nprint(f"每次押注: {bet}元")'}},
+{id:'py2',n:'条件判断 if/else',tag:'core',l:{c:'if条件为真执行一段代码，else执行另一段。所有策略逻辑的基础。',e:'if bankroll>0: print("有钱") else: print("没钱")',code:'bankroll=80\nif bankroll<100:\n    print("资金警告")\nelse:\n    print("正常运行")'}},
+{id:'py3',n:'循环 for & while',tag:'core',l:{c:'for循环遍历序列；while循环在条件为真时持续执行。模拟交易、回测都靠循环。',e:'for i in range(10): 模拟10次交易',code:'import random\nbankroll=100\nfor i in range(10):\n    bet=bankroll*0.25\n    win=random.random()>0.5\n    bankroll+=bet*2 if win else -bet\n    print(f"第{i+1}次: {bankroll:.2f}元")'}},
+{id:'py4',n:'函数 def',tag:'core',l:{c:'把重复用到的逻辑封装成函数，一次定义，多次调用。',e:'def kelly(p,odds): return (p*odds-(1-p))/odds',code:'def kelly(p_win,odds):\n    return (p_win*odds-(1-p_win))/odds\nprint(kelly(0.5,2))'}},
+{id:'py5',n:'列表 & 字典',tag:'core',l:{c:'列表[]存储有序序列；字典{}存储键值对。最常用的两种数据结构。',e:'prices=[100,102,98]；signals={"BOS":True}',code:'prices=[100,102,98,105,103,108]\nreturns=[(prices[i]-prices[i-1])/prices[i-1] for i in range(1,len(prices))]\nprint(returns)'}},
+{id:'py6',n:'NumPy 数组运算',tag:'core',l:{c:'NumPy用向量化运算替代Python循环，速度快100x。处理价格序列的核心库。',e:'np.mean(), np.std(), np.corrcoef()',code:'import numpy as np\nprices=np.array([100,102,98,105,103,108,112])\nreturns=np.diff(prices)/prices[:-1]\nprint(f"平均日收益: {np.mean(returns):.4f}")\nprint(f"累计收益: {(prices[-1]/prices[0]-1):.2%}")'}},
+{id:'py7',n:'Pandas 数据处理',tag:'core',l:{c:'Pandas处理表格数据。DataFrame就像Excel表格，用代码操作。',e:'df["close"].pct_change()计算收益率；df.rolling(20).mean()计算移动均线',code:'import pandas as pd,numpy as np\ndates=pd.date_range("2024-01-01",periods=100)\nprices=100+np.cumsum(np.random.normal(0,1,100))\ndf=pd.DataFrame({"close":prices},index=dates)\ndf["ma20"]=df["close"].rolling(20).mean()\nprint(df.tail())'}},
+{id:'py8',n:'Matplotlib 可视化',tag:'project',l:{c:'量化研究的标配可视化工具。好的可视化是研究报告的核心。',e:'plt.plot()折线图；plt.hist()分布图',code:'import matplotlib.pyplot as plt,numpy as np\nreturns=np.random.normal(0,1,252)\nplt.plot(np.cumsum(returns))\nplt.title("资金曲线")\nplt.show()'}},
+{id:'py9',n:'yfinance 获取市场数据',tag:'project',l:{c:'免费获取股票、ETF、外汇历史数据。这是回测真实策略的数据来源。',e:'yf.download("GC=F") 获取黄金期货历史数据',code:'import yfinance as yf\ngold=yf.download("GC=F",start="2020-01-01")\nreturns=gold["Close"].pct_change().dropna()\nprint(f"年化收益: {returns.mean()*252:.2%}")'}},
+{id:'py10',n:'面向对象 class',tag:'core',l:{c:'用class把数据和方法封装在一起。回测框架通常用面向对象设计。',e:'class Strategy: def generate_signal(self): ...',code:'class KellyStrategy:\n    def __init__(self,p_win,odds):\n        self.kelly=(p_win*odds-(1-p_win))/odds\n    def bet_size(self,bankroll):\n        return bankroll*self.kelly\ns=KellyStrategy(0.55,2)\nprint(f"应押: {s.bet_size(100):.2f}元")'}}
+]},
+{id:'math',icon:'∑',color:'#9B6FD4',title:'Mathematics',desc:'Core math tools for quant research',topics:[
+{id:'m1',n:'线性代数：矩阵 & 向量',tag:'core',l:{c:'矩阵是二维数组，向量是一维数组。投资组合权重是向量；协方差矩阵是矩阵。',e:'组合收益=权重向量·资产收益向量（点积）',code:'import numpy as np\nweights=np.array([0.4,0.3,0.3])\nreturns=np.array([0.05,0.08,-0.02])\nprint(f"组合收益: {np.dot(weights,returns):.2%}")'}},
+{id:'m2',n:'微积分：导数 & 梯度下降',tag:'core',l:{c:'导数衡量函数变化率。梯度下降用导数找函数最小值，是参数优化的核心算法。',e:'找Kelly公式最优解就是对增长率函数求导并令导数=0',code:'def f(x): return (x-3)**2+2\ndef df(x): return 2*(x-3)\nx=0;lr=0.1\nfor i in range(20):\n    x-=lr*df(x)\nprint(f"最小值点: x={x:.4f}")'}},
+{id:'m3',n:'时间序列：平稳性 & 自相关',tag:'core',l:{c:'平稳时间序列均值和方差不随时间变化。ADF检验是最常用的平稳性检验。',e:'股票价格非平稳（有趋势）；股票收益率近似平稳。',code:'# pip install statsmodels\nfrom statsmodels.tsa.stattools import adfuller\nimport numpy as np\nreturns=np.random.normal(0,1,252)\nresult=adfuller(returns)\nprint(f"p值: {result[1]:.4f}")'}},
+{id:'m4',n:'回归分析（OLS）',tag:'core',l:{c:'用自变量预测因变量。因子模型核心：收益率=α+β×因子+ε。',e:'CAPM: 股票超额收益=α+β×市场超额收益',code:'import numpy as np\nmkt=np.random.normal(0,1,252)\nstock=0.02+1.2*mkt+np.random.normal(0,0.5,252)\nA=np.column_stack([np.ones(252),mkt])\nalpha,beta=np.linalg.lstsq(A,stock,rcond=None)[0]\nprint(f"Alpha: {alpha:.4f}, Beta: {beta:.4f}")'}},
+{id:'m5',n:'随机过程：布朗运动',tag:'core',l:{c:'几何布朗运动（GBM）是最基础的股价模型，Black-Scholes期权定价基于此。',e:'dS=μS·dt+σS·dW，μ是漂移率，σ是波动率',code:'import numpy as np\ndt=1/252;mu=0.05;sigma=0.2;S0=100\ndW=np.random.normal(0,np.sqrt(dt),252)\nS=S0*np.exp(np.cumsum((mu-0.5*sigma**2)*dt+sigma*dW))\nprint(f"期末价格: {S[-1]:.2f}")'}},
+{id:'m6',n:'最优化：约束优化',tag:'core',l:{c:'在满足约束条件下最大化/最小化目标函数。投资组合优化：最大化夏普比率，约束权重之和=1。',e:'scipy.optimize是Python解决优化问题的标配工具',code:'from scipy.optimize import minimize\nimport numpy as np\nrets=np.array([0.1,0.15,0.08])\ncov=np.eye(3)*0.04\ndef neg_sharpe(w): return -np.dot(w,rets)/np.sqrt(w@cov@w)\nresult=minimize(neg_sharpe,[1/3,1/3,1/3],constraints={"type":"eq","fun":lambda w:sum(w)-1},bounds=[(0,1)]*3)\nprint(f"最优权重: {result.x.round(3)}")'}}
+]},
+{id:'strat',icon:'📈',color:'#E87D3E',title:'Quant Strategy Research',desc:'From logic to projects with real performance records',topics:[
+{id:'s1',n:'回测框架搭建',tag:'project',l:{c:'回测核心：数据获取→信号生成→仓位管理→绩效评估。避免前视偏差、过拟合、忽略交易成本。',e:'下载历史价格→计算指标→生成信号→模拟持仓→计算收益率',code:'import pandas as pd,numpy as np,yfinance as yf\ndef backtest(ticker,fast,slow):\n    df=yf.download(ticker,start="2020-01-01")["Close"].to_frame("c")\n    df["f"]=df["c"].rolling(fast).mean()\n    df["s"]=df["c"].rolling(slow).mean()\n    df["sig"]=np.where(df["f"]>df["s"],1,-1)\n    strat=df["sig"].shift(1)*df["c"].pct_change()\n    return strat.mean()/strat.std()*252**0.5\nprint(f"夏普: {backtest(\'GC=F\',20,50):.3f}")'}},
+{id:'s2',n:'绩效指标：夏普、回撤、胜率',tag:'interview',l:{c:'夏普比率（风险调整后收益）、最大回撤（最大峰谷跌幅）、胜率、盈亏比。面试必问。',e:'夏普>1良好，>2优秀；最大回撤>30%通常不可接受',code:'import numpy as np,pandas as pd\ndef perf(r):\n    sr=r.mean()/r.std()*252**0.5\n    cum=(1+r).cumprod()\n    mdd=((cum-cum.cummax())/cum.cummax()).min()\n    return {"夏普":round(sr,3),"最大回撤":f"{mdd:.2%}","胜率":f"{(r>0).mean():.2%}"}\nr=pd.Series(np.random.normal(0.0003,0.01,252))\nprint(perf(r))'}},
+{id:'s3',n:'动量策略',tag:'core',l:{c:'过去表现好的资产未来倾向继续表现好。时间序列动量：近期收益为正则做多。',e:'12-1月动量因子：用过去12个月收益排名，跳过最近1个月',code:'import yfinance as yf,numpy as np\ngold=yf.download("GC=F",period="3y")["Close"]\nreturns=gold.pct_change()\nmomentum=returns.rolling(60).sum().shift(1)\nstrat=returns*np.sign(momentum)\nprint(f"动量策略夏普: {strat.mean()/strat.std()*252**0.5:.3f}")'}},
+{id:'s4',n:'均值回归策略',tag:'core',l:{c:'价格偏离均值后倾向回归。布林带策略：价格偏离2σ时反向交易。',e:'价格超过上轨做空，跌破下轨做多',code:'import yfinance as yf,numpy as np,pandas as pd\ngold=yf.download("GC=F",period="2y")["Close"]\nma=gold.rolling(20).mean()\nstd=gold.rolling(20).std()\nsignal=np.where(gold>ma+2*std,-1,np.where(gold<ma-2*std,1,0))\nstrat=pd.Series(signal).shift(1)*gold.pct_change()\nprint(f"均值回归夏普: {strat.mean()/strat.std()*252**0.5:.3f}")'}},
+{id:'s5',n:'做市商逻辑 & 买卖价差',tag:'interview',l:{c:'做市商同时报买价和卖价，赚取价差。核心：如何定价、如何管理库存。',e:'如果你为XAUUSD做市，报价1900/1901，买家来了1000手，价格风险如何管理？',code:'import random\nspread=0.5;position=0;pnl=[]\nfor _ in range(1000):\n    side=random.choice(["buy","sell"])\n    if side=="buy": position-=1;pnl.append(spread/2)\n    else: position+=1;pnl.append(spread/2)\n    pnl[-1]-=abs(position)*0.01\nprint(f"总P&L: {sum(pnl):.2f}")'}},
+{id:'s6',n:'因子模型',tag:'core',l:{c:'用可观测市场因子解释和预测收益。Fama-French三因子：市场、规模、价值。',e:'找到一个新因子，用统计方法证明它能预测未来收益',code:'import numpy as np\nmkt=np.random.normal(0.0004,0.01,252)\nsmb=np.random.normal(0.0001,0.008,252)\nstock=0.0002+1.1*mkt+0.3*smb+np.random.normal(0,0.005,252)\nX=np.column_stack([np.ones(252),mkt,smb])\ncoef=np.linalg.lstsq(X,stock,rcond=None)[0]\nprint(f"Alpha={coef[0]:.6f}, Beta={coef[1]:.3f}")'}},
+{id:'s7',n:'风险管理 & VaR',tag:'interview',l:{c:'VaR(95%,1天)=1%：95%置信度下明天最大亏损不超过1%。超过就触发警报。',e:'超过VaR就触发警报，超过最大回撤限制就强制减仓',code:'import numpy as np\ndef var_es(returns,confidence=0.95):\n    var=np.percentile(returns,(1-confidence)*100)\n    es=returns[returns<=var].mean()\n    return var,es\nreturns=np.random.normal(0,0.01,252)\nvar,es=var_es(returns)\nprint(f"VaR(95%): {var:.2%}")'}},
+{id:'s8',n:'高频交易基础概念',tag:'interview',l:{c:'HFT依赖低延迟基础设施、市场微观结构理解（订单簿）和统计套利信号。',e:'订单簿失衡：买单远多于卖单时，短期价格上涨概率更高',code:'import random\ndef oi(b,a): return (b-a)/(b+a)\nfor _ in range(5):\n    b=random.randint(100,1000);a=random.randint(100,1000)\n    o=oi(b,a)\n    print(f"OI={o:.3f} → {\"看涨\" if o>0.2 else \"看跌\" if o<-0.2 else \"中性\"}")'}}
+]},
+{id:'interview',icon:'🎯',color:'#E84A6F',title:'Interview Training',desc:'Optiver / Jane Street / Citadel real questions',topics:[
+{id:'i1',n:'概率脑筋急转弯：基础',tag:'interview',l:{c:'掷硬币、摸球、生日问题。Jane Street电话一面必考，要求秒出答案并说出完整推理。',e:'生日问题：房间里需要多少人才能有>50%概率两人同天生日？答案：23人',code:'import random\ndef birthday_sim(n,trials=100000):\n    return sum(len(set([random.randint(1,365) for _ in range(n)]))<n for _ in range(trials))/trials\nfor n in [20,23,30]:\n    print(f"{n}人重复概率: {birthday_sim(n):.3f}")'}},
+{id:'i2',n:'概率脑筋急转弯：进阶',tag:'interview',l:{c:'期望步数、赌徒破产、最优停止。考察逻辑推理而非记忆。',e:'公平骰子，连续掷到6需要几步？期望=6步（几何分布）',code:'import random\nsteps=[]\nfor _ in range(100000):\n    n=0\n    while True:\n        n+=1\n        if random.randint(1,6)==6: break\n    steps.append(n)\nprint(f"期望步数: {sum(steps)/len(steps):.3f}")'}},
+{id:'i3',n:'心算训练 Mental Math',tag:'interview',l:{c:'Optiver、Jane Street要求在压力下快速准确计算。每天10分钟练习。',e:'37×43=？用(40-3)(40+3)=1600-9=1591',code:'import random\nfor _ in range(5):\n    a,b=random.randint(10,99),random.randint(10,99)\n    print(f"{a} × {b} = {a*b}")'}},
+{id:'i4',n:'市场微观结构问答',tag:'interview',l:{c:'做市商如何定价？订单流毒性是什么？为什么bid-ask spread存在？',e:'"不活跃小盘股的price spread应该比活跃大盘股宽还是窄？为什么？"',code:'# price spread = 补偿做市商承担风险的成本\n# 库存风险 + 逆向选择风险 + 订单处理成本\n# 不活跃股票：库存风险高 → 价差宽\nprint("理解原理比记答案重要")'}},
+{id:'i5',n:'情景定价题：期权直觉',tag:'interview',l:{c:'不用Black-Scholes，用直觉定价。面试官要看思维框架，不是答案。',e:'"欧式看涨期权，到期1年，标的100，执行价100，波动率20%，大概值多少？"',code:'import numpy as np\ndef mc_call(S,K,sigma,T,sims=100000):\n    z=np.random.normal(0,1,sims)\n    ST=S*np.exp(-0.5*sigma**2*T+sigma*np.sqrt(T)*z)\n    return np.maximum(ST-K,0).mean()\nprint(f"期权价格约: {mc_call(100,100,0.2,1):.2f}")'}},
+{id:'i6',n:'行为面试：讲交易经历',tag:'interview',l:{c:'STAR框架：Situation→Task→Action→Result。结合MT5真实交易经历回答。',e:'你的Pine Script从第1版到第10版的迭代过程，就是最好的故事材料',code:'# 准备3个故事：\n# 1. 一次成功的交易决策（强调过程，不是运气）\n# 2. 一次亏损后的反思和改进\n# 3. 如何用数据推翻自己的直觉偏见\nprint("故事比公式更打动面试官")'}}
+]}
+];
+
+const P=[
+{id:'p1',title:'Kelly Position Visualizer',phase:'P1',color:'#4A7FE8',status:'prog',desc:'用Python实现Kelly公式，可视化不同仓位策略的长期资金曲线对比，量化破产风险。',skills:['Kelly公式','NumPy','Matplotlib','蒙特卡洛'],outcome:'简历上第一个量化项目，展示概率直觉和Python能力',steps:['实现Kelly公式计算器（已完成）','用循环模拟500次交易','比较0.1x/0.5x/1x/2x Kelly的资金曲线','计算每种策略的破产概率','用matplotlib画对比图','写100字英文项目说明']},
+{id:'p2',title:'XAUUSD Trade History Analysis',phase:'P1',color:'#2D9E6B',status:'todo',desc:'用Python分析MT5账户真实交易记录，计算所有绩效指标，用Kelly公式反推最优仓位。',skills:['Pandas','绩效指标','真实数据','Kelly应用'],outcome:'把真实交易经验变成量化证据，面试时有据可依',steps:['从MT5导出交易历史CSV','用Pandas读取和清洗数据','计算胜率、盈亏比、期望值、夏普比率、最大回撤','用Kelly公式计算历史最优仓位','对比实际仓位和Kelly仓位','生成PDF报告']},
+{id:'p3',title:'Systematic Backtesting Framework',phase:'P2',color:'#E87D3E',status:'todo',desc:'从零搭建完整回测引擎，包含数据获取、信号生成、仓位管理、绩效评估全流程。',skills:['回测设计','yfinance','OOP','风险管理'],outcome:'展示系统化思维和软件工程能力',steps:['设计Strategy基础类','实现数据获取模块','实现信号生成接口','实现Kelly仓位管理','实现绩效计算模块','测试均线交叉策略','Pine Script策略逻辑Python复现']},
+{id:'p4',title:'Gold Multi-Factor Research',phase:'P2',color:'#9B6FD4',status:'todo',desc:'寻找能预测黄金价格的统计因子，用严格方法验证有效性，产出英文研究报告。',skills:['因子研究','回归分析','统计检验','研究写作'],outcome:'量化研究员核心能力展示，最接近真实工作内容',steps:['收集候选因子：DXY、实际利率、VIX、动量','对每个因子做统计检验','用OLS回归量化因子暴露','建立多因子线性模型','样本外验证','写英文研究报告（3-5页）']},
+{id:'p5',title:'Options Pricing & Vol Surface',phase:'P3',color:'#E84A6F',status:'todo',desc:'实现Black-Scholes模型，分析隐含波动率微笑，理解市场对尾部风险的定价。',skills:['期权理论','BS模型','隐含波动率','蒙特卡洛'],outcome:'进入量化研究和衍生品交易领域的核心项目',steps:['实现Black-Scholes定价公式','实现Greeks计算','用二分法求隐含波动率','下载真实期权链数据','画出波动率微笑曲线','分析虚值看跌期权为何更贵']},
+{id:'p6',title:'Full Quant Research Paper',phase:'P3',color:'#E87D3E',status:'todo',desc:'整合所有项目，写成专业量化研究报告。直接作为研究生申请的Writing Sample。',skills:['研究写作','数据分析','可视化','英文学术写作'],outcome:'直接放进研究生申请材料的核心研究样本',steps:['选定最好的一个策略','重新用学术标准复现','写完整英文论文（10页）','上传到GitHub','在申请文书中详细描述']}
+];
+
+const R=[
+{title:'Trading Internship — California Electricity Market',desc:'已有。强调：量化分析，P&L追踪，做市商逻辑理解，实际交易决策。你最强的差异化资产。',status:'done',tip:'准备3个具体决策故事，说清楚如何用数据驱动判断'},
+{title:'XAUUSD Systematic Trading Record',desc:'MT5账户真实交易。项目2完成后转化为量化绩效数据：夏普比率、胜率、Kelly分析。',status:'prog',tip:'不要说"我做过外汇交易"，要说"有N个月系统化交易记录，夏普X，胜率Y%"'},
+{title:'Kelly Position Visualizer (Project 1)',desc:'Python实现，GitHub上线。展示概率直觉、Kelly公式理解、可视化能力。',status:'prog',tip:'代码要整洁，README写清楚，让面试官能直接跑起来'},
+{title:'XAUUSD Trade Analysis (Project 2)',desc:'把真实交易记录转化为量化报告。你独有的数据，没人和你一样。',status:'todo',tip:'这个项目是你最独特的资产'},
+{title:'Backtesting Framework (Project 3)',desc:'展示软件工程能力和系统化思维。',status:'todo',tip:'代码结构比策略表现更重要'},
+{title:'Quant Research Paper (Projects 4+6)',desc:'学术级研究报告，直接作为研究生申请Writing Sample。哥大ERM、NYU必备。',status:'todo',tip:'这是申请材料里最重要的一份文件'},
+{title:'Python / Quant Tech Stack',desc:'NumPy, Pandas, Matplotlib, statsmodels, scipy, yfinance',status:'prog',tip:'GitHub要有绿色格子，每天commit一点'},
+{title:'English Resume (Quant Focus)',desc:'针对美国研究生申请和量化实习的单页简历。',status:'prog',tip:'GPA不高，项目和实习经历要格外突出；用数字量化每一个成就'}
+];
+
+let done=new Set(['p1','p2','py1']),notes={},projNotes={},journals=[],openSubj=new Set(),openUnits=new Set(),openProj=new Set(),filterTag='all';
+
+function load(){try{const d=JSON.parse(localStorage.getItem('kq3')||'{}');if(d.done)done=new Set(d.done);if(d.notes)notes=d.notes;if(d.projNotes)projNotes=d.projNotes;if(d.journals)journals=d.journals;if(d.openSubj)openSubj=new Set(d.openSubj);}catch(e){}}
+function save(){try{localStorage.setItem('kq3',JSON.stringify({done:[...done],notes,projNotes,journals,openSubj:[...openSubj]}));}catch(e){}}
+function totalT(){return C.reduce((a,s)=>a+s.topics.length,0);}
+function updateStats(){
+  const t=totalT(),d=done.size,p=Math.round(d/t*100);
+  document.getElementById('h-pct').textContent=p+'%';
+  document.getElementById('h-pct2').textContent=p+'%';
+  document.getElementById('h-bar').style.width=p+'%';
+  document.getElementById('h-done').textContent=d;
+  document.getElementById('h-proj').textContent=P.filter(x=>x.status==='prog').length;
+  const days=Math.max(1,Math.round((new Date()-new Date('2026-06-27'))/86400000)+1);
+  document.getElementById('h-days').textContent=days;
+}
+function stab(tag,el){filterTag=tag;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));el.classList.add('on');renderC();}
+function renderC(){
+  document.getElementById('subj-list').innerHTML=C.map(s=>{
+    const ft=filterTag==='all'?s.topics:s.topics.filter(t=>t.tag===filterTag);
+    if(!ft.length)return'';
+    const d=s.topics.filter(t=>done.has(t.id)).length,pct=Math.round(d/s.topics.length*100),isOpen=openSubj.has(s.id);
+    return`<div class="subj"><div class="subj-header" onclick="togS('${s.id}')"><div class="subj-icon" style="background:${s.color}20">${s.icon}</div><div class="subj-info"><div class="subj-name">${s.title}</div><div class="subj-meta">${s.desc} · ${d}/${s.topics.length}</div></div><div class="subj-pct">${pct}%</div></div><div class="subj-bar"><div class="subj-bar-fill" style="width:${pct}%;background:${s.color}"></div></div><div class="topics ${isOpen?'open':''}">${ft.map(t=>{const uO=openUnits.has(t.id),dn=done.has(t.id);return`<div class="topic" onclick="togT('${t.id}')"><div class="chk ${dn?'done':''}"></div><span class="topic-name ${dn?'done':''}">${t.n}</span><span class="tag tag-${t.tag}">${t.tag==='interview'?'面试题':t.tag==='project'?'项目':'基础'}</span></div>${t.l?`<button class="expand-btn" onclick="event.stopPropagation();togU('${t.id}')">${uO?'▲ 收起':'▼ 展开教材 + 笔记'}</button><div class="lesson ${uO?'open':''}" id="lb-${t.id}"><div class="lsec">概念</div><div class="ltext">${t.l.c}</div><div class="lsec">例子</div><div class="ltext">${t.l.e}</div><div class="lsec">代码</div><pre class="lcode">${t.l.code}</pre><div class="lsec">我的笔记</div><textarea class="note-area" id="note-${t.id}" placeholder="写下你的理解、问题、或者自己的例子...">${notes[t.id]||''}</textarea><button class="save-btn" onclick="saveNote('${t.id}')">保存笔记</button><span class="saved-msg" id="ns-${t.id}">已保存 ✓</span></div>`:''}`;}).join('')}</div></div>`;
+  }).join('');
+}
+function renderP(){
+  document.getElementById('proj-list').innerHTML=P.map(p=>{const isO=openProj.has(p.id);return`<div class="proj"><div class="proj-header" onclick="togP('${p.id}')"><div class="proj-num" style="background:${p.color}20;color:${p.color}">${p.phase}</div><div class="proj-info"><div class="proj-title">${p.title}</div><div class="proj-desc">${p.desc}</div><div class="proj-tags">${p.skills.map(s=>`<span class="tag tag-core">${s}</span>`).join('')}</div></div><span class="proj-status ${p.status==='done'?'st-done':p.status==='prog'?'st-prog':'st-todo'}">${p.status==='done'?'完成':p.status==='prog'?'进行中':'未开始'}</span></div><div class="proj-body ${isO?'open':''}" id="pb-${p.id}"><div class="sec-label2">目标产出</div><div class="ltext">${p.outcome}</div><div class="sec-label2" style="margin-top:12px">步骤</div><ul class="step-list">${p.steps.map(s=>`<li class="step">${s}</li>`).join('')}</ul><div class="sec-label2" style="margin-top:12px">进度笔记 & 代码</div><textarea class="proj-note" id="pn-${p.id}" placeholder="粘贴你的代码、记录进度、写下遇到的问题...">${projNotes[p.id]||''}</textarea><button class="save-btn" style="margin-top:6px" onclick="saveProjNote('${p.id}')">保存</button><span class="saved-msg" id="pns-${p.id}">已保存 ✓</span></div></div>`;}).join('');
+}
+function renderJ(){const l=document.getElementById('j-list');if(!journals.length){l.innerHTML='<div class="empty">还没有记录。今天学了什么？写下来。</div>';return;}l.innerHTML=[...journals].reverse().map(j=>`<div class="j-entry"><div class="j-date">${j.date} <span class="tag tag-core">${j.tag}</span></div><div class="j-text">${j.text}</div></div>`).join('');}
+function renderR(){document.getElementById('res-list').innerHTML=R.map(r=>`<div class="res-card"><div class="res-title">${r.title}</div><div class="res-desc">${r.desc}</div><div style="margin-top:8px"><span class="proj-status ${r.status==='done'?'st-done':r.status==='prog'?'st-prog':'st-todo'}">${r.status==='done'?'已有':r.status==='prog'?'进行中':'待开始'}</span></div><div class="res-tip">💡 ${r.tip}</div></div>`).join('');}
+function togS(id){if(openSubj.has(id))openSubj.delete(id);else openSubj.add(id);save();renderC();}
+function togT(id){if(done.has(id))done.delete(id);else done.add(id);save();updateStats();renderC();}
+function togU(id){if(openUnits.has(id))openUnits.delete(id);else openUnits.add(id);renderC();}
+function togP(id){if(openProj.has(id))openProj.delete(id);else openProj.add(id);renderP();}
+function saveNote(id){const el=document.getElementById('note-'+id);if(el){notes[id]=el.value;save();}const ns=document.getElementById('ns-'+id);if(ns){ns.style.display='inline';setTimeout(()=>ns.style.display='none',2000);}}
+function saveProjNote(id){const el=document.getElementById('pn-'+id);if(el){projNotes[id]=el.value;save();}const ns=document.getElementById('pns-'+id);if(ns){ns.style.display='inline';setTimeout(()=>ns.style.display='none',2000);}}
+function saveJ(){const text=document.getElementById('j-text').value.trim();if(!text)return;const tag=document.getElementById('j-tag').value;const date=new Date().toLocaleDateString('zh-CN',{month:'long',day:'numeric',weekday:'short'});journals.push({text,tag,date});document.getElementById('j-text').value='';save();updateStats();renderJ();}
+load();renderC();renderP();renderJ();renderR();updateStats();
+
+const GRE_ROADMAP=[
+{id:'r1',color:'#4A7FE8',title:'月1-2：诊断 + 基础建立',meta:'每天2小时 · 摸清底线，建立框架',tasks:[
+{t:'做一套完整模拟题（ETS Official free test）',note:'记录Quant和Verbal各自错题类型'},
+{t:'Quant：系统复习算术、代数、几何、数据分析',note:'重点：比例、百分比、数列、坐标几何'},
+{t:'Verbal：开始Manhattan 5lb或Magoosh词汇，每天30个',note:'重点背高频GRE词：Section 1核心500词'},
+{t:'每天做10道Quant练习题，保持手感',note:'目标：Quant正确率>90%'},
+{t:'Reading Comprehension：每天1篇，精读分析题目逻辑',note:'GRE RC考逻辑推断，不是翻译'},
+]},
+{id:'r2',color:'#2D9E6B',title:'月3-4：专项强化',meta:'每天2.5小时 · 攻克弱项，刷题量上来',tasks:[
+{t:'Quant：冲击满分，做ETS官方题库全部题目',note:'错一道分析一道，不允许同类型错第二次'},
+{t:'Verbal：词汇量冲到1500+，开始做TC/SE题',note:'Text Completion和Sentence Equivalence是送分题'},
+{t:'每周做一套完整mock test（计时）',note:'模拟真实考试压力，分析错误模式'},
+{t:'Writing：学习Issue和Argument模板',note:'AWA目标4.0，不需要太高，主要靠结构清晰'},
+{t:'RC：练习抓主旨、找论据、识别作者态度',note:'每篇文章做完后总结文章结构'},
+]},
+{id:'r3',color:'#E87D3E',title:'月5：冲刺模拟',meta:'每天3小时 · 全真模拟，查缺补漏',tasks:[
+{t:'每3天一套完整mock（ETS PowerPrep II + 第三方题库）',note:'目标稳定在320+'},
+{t:'Quant：专攻Data Interpretation，这是最容易丢分的地方',note:'图表题需要快速阅读数据，练速度'},
+{t:'Verbal：把错题本里的词全部过一遍',note:'做到看到词就秒出意思'},
+{t:'AWA：写5篇Issue + 5篇Argument，找人批改或用Grammarly',note:'30分钟写完，结构比内容更重要'},
+{t:'模拟考试时间管理：Quant每题<2分钟，Verbal每题<1.5分钟',note:'做不出来直接跳过，最后回来猜'},
+]},
+{id:'r4',color:'#9B6FD4',title:'月6：考前两周',meta:'减少新题，保持状态',tasks:[
+{t:'只做已经做过的题型，不引入新题库',note:'建立信心，不是发现新弱点'},
+{t:'每天复习错题本，词汇本全部过一遍',note:''},
+{t:'考前三天：轻度练习，保证睡眠',note:'状态比临时抱佛脚重要'},
+{t:'考试当天：先做Quant（最有把握），保持节奏',note:'Quant拿满分，Verbal稳住155+'},
+]}
+];
+
+const GRE_QUANT=[
+{id:'q1',title:'算术基础',topics:[
+{n:'整数、质数、因数、倍数',tip:'GRE最爱考：某数被3整除的条件，质因数分解'},
+{n:'分数、小数、百分比互转',tip:'百分比变化：增加20%再减20%≠原值，实际减少4%'},
+{n:'比例与比率',tip:'经典：混合问题、速度问题'},
+{n:'指数与根号',tip:'负数的偶次根不存在；根号下不能有负数'},
+{n:'绝对值',tip:'|x-3|<2的解法：-2<x-3<2，即1<x<5'},
+]},
+{id:'q2',title:'代数',topics:[
+{n:'一次方程与二次方程',tip:'韦达定理：两根之和=-b/a，两根之积=c/a'},
+{n:'不等式',tip:'两边乘以负数不等号翻转；变量符号未知时分类讨论'},
+{n:'函数与图像',tip:'GRE不考高等函数，主要考一次、二次函数图像'},
+{n:'数列（等差、等比）',tip:'等差数列求和：n×(首+尾)/2'},
+{n:'Quantitative Comparison题型',tip:'QC题：比较A和B的大小，选A大/B大/相等/无法确定'},
+]},
+{id:'q3',title:'几何',topics:[
+{n:'三角形：面积、勾股定理、特殊三角形',tip:'30-60-90：边比1:√3:2；45-45-90：边比1:1:√2'},
+{n:'圆：面积、周长、弧度、扇形',tip:'扇形面积=πr²×(圆心角/360)'},
+{n:'坐标几何：斜率、距离、中点',tip:'两点斜率=(y2-y1)/(x2-x1)；斜率×垂线斜率=-1'},
+{n:'多边形面积',tip:'GRE常考：梯形面积=(上底+下底)×高/2'},
+{n:'三维图形：体积、表面积',tip:'球体积=4/3πr³；圆柱体积=πr²h'},
+]},
+{id:'q4',title:'数据分析',topics:[
+{n:'均值、中位数、众数、极差',tip:'平均值被极端值影响大；中位数不受影响'},
+{n:'标准差与方差',tip:'GRE不要求计算标准差，只需理解大小关系'},
+{n:'概率',tip:'P(A或B)=P(A)+P(B)-P(A且B)；独立事件乘法'},
+{n:'排列组合',tip:'Permutation(顺序有关)：nPr=n!/(n-r)！；Combination：nCr=n!/(r!(n-r)!)'},
+{n:'图表读数（Data Interpretation）',tip:'最容易丢分：读图要仔细，注意单位、比例尺、是否是百分比还是绝对值'},
+]}
+];
+
+const GRE_VERBAL=[
+{id:'v1',title:'GRE高频词 A-C（60词）',words:[
+{w:'aberrant',m:'异常的，偏离正轨的'},{w:'abscond',m:'潜逃，秘密离开'},{w:'abstemious',m:'节制的，有节制饮食的'},{w:'acrimony',m:'尖刻，刻薄'},{w:'adulterate',m:'掺假，使纯度降低'},{w:'amalgamate',m:'合并，混合'},{w:'ambivalence',m:'矛盾心理，好恶参半'},{w:'ameliorate',m:'改善，改良'},{w:'anachronism',m:'时代错误，不合时宜的人/物'},{w:'anodyne',m:'止痛的；无害的，平淡无奇的'},{w:'antipathy',m:'厌恶，反感'},{w:'apocryphal',m:'真实性存疑的，伪造的'},{w:'approbation',m:'赞许，认可'},{w:'arduous',m:'艰难的，费力的'},{w:'artless',m:'朴实无华的；无技巧的'},{w:'ascetic',m:'苦行的，禁欲的'},{w:'assuage',m:'减轻（痛苦），平息'},{w:'attenuate',m:'削弱，使变细'},{w:'audacious',m:'大胆的，无畏的'},{w:'auspicious',m:'吉祥的，有利的'},{w:'avarice',m:'贪婪，吝啬'},{w:'banal',m:'陈腐的，平庸的'},{w:'belie',m:'掩盖，与…不符'},{w:'bellicose',m:'好战的，好斗的'},{w:'bemoan',m:'悲叹，为…哀愁'},{w:'benign',m:'良性的，温和的，无害的'},{w:'bolster',m:'支持，加强'},{w:'bombast',m:'夸大的言辞，高调'},{w:'boorish',m:'粗鲁的，粗野的'},{w:'burgeon',m:'迅速成长，繁荣'},{w:'cacophony',m:'刺耳的声音，不和谐'},{w:'capricious',m:'变化无常的，任性的'},{w:'castigation',m:'严厉批评，惩罚'},{w:'catalyst',m:'催化剂；促进变化的人/事'},{w:'caustic',m:'腐蚀性的；刻薄的，讽刺的'},{w:'chicanery',m:'欺骗，欺诈手段'},{w:'circumspect',m:'谨慎的，慎重的'},{w:'clamor',m:'喧嚣；强烈要求'},{w:'cloying',m:'令人腻烦的，过分甜腻的'},{w:'coalesce',m:'合并，联合'},{w:'cogent',m:'有说服力的，令人信服的'},{w:'complaisant',m:'顺从的，迁就的'},{w:'convoluted',m:'复杂的，错综的'},{w:'corroborate',m:'证实，确认'},{w:'credulous',m:'轻信的，易受骗的'},{w:'culpable',m:'有罪的，该责备的'},{w:'daunt',m:'使气馁，使畏缩'},{w:'dearth',m:'缺乏，稀少'},{w:'decry',m:'公开谴责，强烈批评'},{w:'deferential',m:'顺从的，尊重的'},{w:'deleterious',m:'有害的，有毒的'},{w:'denounce',m:'谴责，揭发'},{w:'deplete',m:'耗尽，使减少'},{w:'deride',m:'嘲笑，嘲弄'},{w:'desiccate',m:'使干燥，脱水'},{w:'desultory',m:'散漫的，无目的的'},{w:'diffident',m:'缺乏自信的，羞怯的'},{w:'dilettante',m:'业余爱好者，浅尝者'},{w:'discern',m:'辨别，识别'},{w:'disparate',m:'本质不同的，迥异的'},
+]},
+{id:'v2',title:'GRE高频词 D-G（50词）',words:[
+{w:'dispassionate',m:'不带感情的，冷静客观的'},{w:'dissemble',m:'掩盖真实感情，伪装'},{w:'dogmatic',m:'教条的，武断的'},{w:'dubious',m:'怀疑的，可疑的'},{w:'ebullience',m:'热情洋溢，活力充沛'},{w:'efficacy',m:'功效，有效性'},{w:'effrontery',m:'厚颜无耻，鲁莽'},{w:'elegy',m:'挽歌，悲歌'},{w:'elliptical',m:'椭圆形的；晦涩的，省略的'},{w:'emollient',m:'使软化的；安抚性的'},{w:'empirical',m:'以经验为依据的，实证的'},{w:'endemic',m:'地方性的，某地特有的'},{w:'enervate',m:'使衰弱，使无力'},{w:'engender',m:'产生，引起'},{w:'ephemeral',m:'短暂的，朝生暮死的'},{w:'equivocal',m:'模棱两可的，含糊的'},{w:'erudite',m:'博学的，有学问的'},{w:'esoteric',m:'深奥的，只有少数人懂的'},{w:'eulogy',m:'赞美的话，颂词'},{w:'exacerbate',m:'使恶化，使加重'},{w:'exculpate',m:'使无罪，开脱'},{w:'exigent',m:'紧迫的；苛求的'},{w:'expedient',m:'权宜之计的；有利的'},{w:'extant',m:'现存的，尚存的'},{w:'facetious',m:'爱开玩笑的，轻浮的'},{w:'fallacious',m:'谬误的，欺骗性的'},{w:'fawn',m:'奉承，讨好'},{w:'feckless',m:'无能的，不负责任的'},{w:'felicitous',m:'恰当的，措辞得当的'},{w:'fervent',m:'热烈的，热情的'},{w:'filibuster',m:'阻挠议事，阻挠战术'},{w:'flagrant',m:'明目张胆的，罪行昭彰的'},{w:'flippant',m:'轻率的，无礼的'},{w:'florid',m:'华丽的，过度装饰的'},{w:'forbear',m:'克制，忍耐'},{w:'forestall',m:'预先阻止，先发制人'},{w:'fortuitous',m:'偶然的，意外的'},{w:'fractious',m:'难以控制的，易怒的'},{w:'frugal',m:'节俭的，朴素的'},{w:'furtive',m:'鬼鬼祟祟的，偷偷摸摸的'},{w:'garrulous',m:'喋喋不休的，饶舌的'},{w:'grandiloquent',m:'夸夸其谈的，浮夸的'},{w:'gratuitous',m:'无必要的，无缘无故的'},{w:'gregarious',m:'群居的；爱社交的'},{w:'guile',m:'狡猾，欺骗'},{w:'gullible',m:'容易上当的，轻信的'},{w:'hackneyed',m:'陈腐的，老套的'},{w:'hapless',m:'不幸的，倒霉的'},{w:'harangue',m:'长篇大论，激烈演说'},{w:'hegemony',m:'霸权，领导权'},
+]},
+{id:'v3',title:'GRE高频词 H-P（50词）',words:[
+{w:'hermetic',m:'密封的；与外界隔绝的'},{w:'hubris',m:'傲慢，自大'},{w:'iconoclast',m:'打破旧习的人，批评传统者'},{w:'idiosyncratic',m:'特有的，独特的'},{w:'ignominious',m:'可耻的，不名誉的'},{w:'impassive',m:'无动于衷的，泰然自若的'},{w:'impecunious',m:'贫穷的，没有钱的'},{w:'impetuous',m:'冲动的，鲁莽的'},{w:'implacable',m:'不可调和的，无情的'},{w:'inchoate',m:'刚开始的，未发展成熟的'},{w:'incongruous',m:'不和谐的，不协调的'},{w:'indolent',m:'懒惰的，懒散的'},{w:'inimical',m:'有害的，不友好的'},{w:'innocuous',m:'无害的，无伤大雅的'},{w:'insipid',m:'平淡无味的，乏味的'},{w:'intractable',m:'难以控制的，顽固的'},{w:'inveterate',m:'根深蒂固的，积习难改的'},{w:'irascible',m:'易怒的，脾气暴躁的'},{w:'laconic',m:'简洁的，用词精练的'},{w:'lassitude',m:'疲倦，倦怠'},{w:'laud',m:'称赞，赞美'},{w:'loquacious',m:'多嘴的，饶舌的'},{w:'lucid',m:'清晰的，明白易懂的'},{w:'lugubrious',m:'悲哀的，愁容满面的'},{w:'magnanimous',m:'宽宏大量的，高尚的'},{w:'malign',m:'恶意诽谤；有害的'},{w:'malleable',m:'可塑的，易受影响的'},{w:'mendacious',m:'爱说谎的，虚假的'},{w:'mercurial',m:'善变的，喜怒无常的'},{w:'meticulous',m:'一丝不苟的，过于细心的'},{w:'misanthrope',m:'厌世者，愤世嫉俗者'},{w:'mitigate',m:'减轻，缓和'},{w:'mordant',m:'尖刻的，讽刺的'},{w:'mundane',m:'平凡的，世俗的'},{w:'nefarious',m:'极坏的，穷凶极恶的'},{w:'neophyte',m:'新手，初学者'},{w:'nonchalant',m:'漠不关心的，若无其事的'},{w:'obdurate',m:'顽固的，执拗的'},{w:'obsequious',m:'谄媚的，奉承的'},{w:'obstinate',m:'固执的，倔强的'},{w:'obtuse',m:'迟钝的，愚笨的'},{w:'onerous',m:'繁重的，费力的'},{w:'opaque',m:'不透明的；晦涩难懂的'},{w:'opprobrium',m:'公开的谴责，耻辱'},{w:'ostentatious',m:'炫耀的，卖弄的'},{w:'paucity',m:'缺乏，少量'},{w:'pernicious',m:'有害的，有毒的'},{w:'pervasive',m:'无处不在的，弥漫的'},{w:'phlegmatic',m:'冷静的，迟钝的'},{w:'placate',m:'安抚，抚慰'},
+]},
+{id:'v4',title:'GRE高频词 P-Z（50词）',words:[
+{w:'platitude',m:'陈词滥调，老生常谈'},{w:'plausible',m:'似乎合理的，貌似可信的'},{w:'polemical',m:'争论性的，好辩的'},{w:'pragmatic',m:'务实的，注重实际的'},{w:'precipitate',m:'使突然发生；仓促的，鲁莽的'},{w:'presumptuous',m:'放肆的，冒昧的'},{w:'prevaricate',m:'支吾其词，说谎'},{w:'probity',m:'诚实，廉洁'},{w:'proclivity',m:'倾向，癖好'},{w:'prodigal',m:'挥霍的，浪费的'},{w:'profligate',m:'放荡的，挥霍无度的'},{w:'prolific',m:'多产的，丰富的'},{w:'propitious',m:'吉利的，顺利的'},{w:'proscribe',m:'禁止，排斥'},{w:'punctilious',m:'一丝不苟的，过分注重礼节的'},{w:'querulous',m:'爱抱怨的，牢骚满腹的'},{w:'quixotic',m:'空想的，不切实际的'},{w:'recalcitrant',m:'顽抗的，不服从的'},{w:'recondite',m:'深奥的，鲜为人知的'},{w:'redoubtable',m:'令人敬畏的，强大的'},{w:'refute',m:'驳斥，反驳'},{w:'relegate',m:'使降级，贬黜'},{w:'remonstrate',m:'规劝，抗议'},{w:'repudiate',m:'拒绝，否认，抛弃'},{w:'reticent',m:'沉默寡言的，不爱表达的'},{w:'rhetoric',m:'修辞学；华而不实的言辞'},{w:'sagacious',m:'睿智的，有洞察力的'},{w:'sanction',m:'批准，认可；制裁（双义词）'},{w:'sardonic',m:'讥讽的，嘲笑的'},{w:'scrupulous',m:'一丝不苟的，有道德的'},{w:'sedulous',m:'勤勉的，孜孜不倦的'},{w:'solicitous',m:'热心的，关切的'},{w:'soporific',m:'催人入睡的，令人厌倦的'},{w:'specious',m:'似是而非的，外表好看但实质错误的'},{w:'spendthrift',m:'挥霍者，浪费者'},{w:'spurious',m:'伪造的，假冒的'},{w:'stolid',m:'不易激动的，迟钝的'},{w:'strident',m:'刺耳的；强硬的'},{w:'stupefy',m:'使茫然，使目瞪口呆'},{w:'subvert',m:'颠覆，破坏'},{w:'sycophant',m:'马屁精，谄媚者'},{w:'taciturn',m:'沉默寡言的'},{w:'temerity',m:'鲁莽，冒失'},{w:'tenacious',m:'坚韧的，顽强的'},{w:'torpor',m:'麻木，迟钝，不活跃'},{w:'truculent',m:'好斗的，粗暴的'},{w:'turbid',m:'混浊的，混乱的'},{w:'vacuous',m:'茫然的，空洞的'},{w:'venerate',m:'尊崇，崇拜'},{w:'vituperate',m:'严厉指责，谩骂'},
+]},
+{id:'v5',title:'TC/RC题型技巧',words:[
+{w:'TC核心规则',m:'找"线索词"——句子里有一个词能决定空格答案的情感方向'},{w:'正向关系词',m:'because/since/so/therefore → 因果同向填'},{w:'转折关系词',m:'although/but/however/yet/despite → 答案与前文相反'},{w:'否定结构',m:'not/never/far from/anything but → 双重否定变肯定'},{w:'同义重复',m:'空格答案通常是已知词的同义词，找到锚点词'},{w:'RC主旨题',m:'问main point/purpose：选最能概括全文的，不选细节'},{w:'RC推断题',m:'can be inferred：答案100%从原文得出，不加个人判断'},{w:'RC态度题',m:'作者情感：critical批评/skeptical怀疑/supportive支持/ambivalent矛盾'},{w:'RC陷阱',m:'Too specific过于具体 / Too broad过于宽泛 / Opposite方向相反'},
+]}
+];
+
+const QUANT_WORDS=[
+{id:'qw1',title:'概率统计术语（40词）',words:[
+{w:'mean / average',m:'均值，平均数'},{w:'median',m:'中位数'},{w:'mode',m:'众数'},{w:'variance',m:'方差，偏差程度'},{w:'standard deviation',m:'标准差'},{w:'probability',m:'概率'},{w:'conditional probability',m:'条件概率'},{w:'independent events',m:'独立事件'},{w:'mutually exclusive',m:'互斥的'},{w:'permutation',m:'排列（顺序有关）'},{w:'combination',m:'组合（顺序无关）'},{w:'expected value',m:'期望值'},{w:'normal distribution',m:'正态分布，钟形曲线'},{w:'skewness',m:'偏度，分布的不对称性'},{w:'kurtosis',m:'峰度，分布的尾部厚度'},{w:'correlation',m:'相关性'},{w:'covariance',m:'协方差'},{w:'regression',m:'回归分析'},{w:'hypothesis testing',m:'假设检验'},{w:'null hypothesis',m:'零假设（H0）'},{w:'p-value',m:'P值，显著性水平'},{w:'confidence interval',m:'置信区间'},{w:'sample size',m:'样本量'},{w:'random variable',m:'随机变量'},{w:'probability distribution',m:'概率分布'},{w:'Bayesian inference',m:'贝叶斯推断'},{w:'Monte Carlo simulation',m:'蒙特卡洛模拟'},{w:'central limit theorem',m:'中心极限定理'},{w:'law of large numbers',m:'大数定律'},{w:'binomial distribution',m:'二项分布'},{w:'Poisson distribution',m:'泊松分布'},{w:'uniform distribution',m:'均匀分布'},{w:'fat tail / heavy tail',m:'肥尾，极端事件概率高于正态'},{w:'outlier',m:'离群值，异常值'},{w:'percentile',m:'百分位数'},{w:'quartile',m:'四分位数'},{w:'interquartile range (IQR)',m:'四分位距'},{w:'statistical significance',m:'统计显著性'},{w:'type I error',m:'第一类错误，假阳性'},{w:'type II error',m:'第二类错误，假阴性'},
+]},
+{id:'qw2',title:'数学与编程术语（40词）',words:[
+{w:'algorithm',m:'算法'},{w:'iteration',m:'迭代'},{w:'recursion',m:'递归'},{w:'optimization',m:'最优化'},{w:'gradient descent',m:'梯度下降'},{w:'convergence',m:'收敛'},{w:'divergence',m:'发散'},{w:'matrix',m:'矩阵'},{w:'vector',m:'向量'},{w:'eigenvalue',m:'特征值'},{w:'eigenvector',m:'特征向量'},{w:'determinant',m:'行列式'},{w:'derivative',m:'导数'},{w:'integral',m:'积分'},{w:'differential equation',m:'微分方程'},{w:'stochastic process',m:'随机过程'},{w:'Brownian motion',m:'布朗运动'},{w:'Markov chain',m:'马尔可夫链'},{w:'time series',m:'时间序列'},{w:'stationarity',m:'平稳性'},{w:'autocorrelation',m:'自相关'},{w:'backtesting',m:'回测'},{w:'overfitting',m:'过拟合'},{w:'cross-validation',m:'交叉验证'},{w:'feature engineering',m:'特征工程'},{w:'dimensionality reduction',m:'降维'},{w:'principal component analysis',m:'主成分分析（PCA）'},{w:'machine learning',m:'机器学习'},{w:'supervised learning',m:'有监督学习'},{w:'unsupervised learning',m:'无监督学习'},{w:'neural network',m:'神经网络'},{w:'data structure',m:'数据结构'},{w:'complexity',m:'复杂度（时间/空间）'},{w:'heuristic',m:'启发式方法'},{w:'interpolation',m:'插值'},{w:'extrapolation',m:'外推'},{w:'simulation',m:'模拟'},{w:'numerical method',m:'数值方法'},{w:'linear programming',m:'线性规划'},{w:'integer programming',m:'整数规划'},
+]}
+];
+
+const FIN_WORDS=[
+{id:'fw1',title:'市场与交易术语（50词）',words:[
+{w:'arbitrage',m:'套利，利用价差无风险获利'},{w:'bid-ask spread',m:'买卖价差，做市商赚取的价差'},{w:'market maker',m:'做市商，提供双向报价的机构'},{w:'liquidity',m:'流动性，资产变现的容易程度'},{w:'volatility',m:'波动率，价格变动幅度'},{w:'hedging',m:'对冲，通过相反头寸降低风险'},{w:'leverage',m:'杠杆，用借来的钱放大收益/风险'},{w:'short selling',m:'做空，借股票卖出后买回'},{w:'long position',m:'多头，持有资产期待上涨'},{w:'short position',m:'空头，卖空资产期待下跌'},{w:'alpha',m:'超额收益，超越基准的部分'},{w:'beta',m:'市场敏感度，与市场整体的相关程度'},{w:'Sharpe ratio',m:'夏普比率，风险调整后收益'},{w:'drawdown',m:'回撤，从高点到低点的跌幅'},{w:'maximum drawdown',m:'最大回撤'},{w:'P&L',m:'盈亏（Profit and Loss）'},{w:'mark-to-market',m:'按市价计算，每日盯市'},{w:'margin call',m:'保证金追缴通知'},{w:'execution',m:'执行，下单成交'},{w:'slippage',m:'滑点，预期价格与实际成交价的差'},{w:'order book',m:'订单簿，买卖委托的汇总'},{w:'market depth',m:'市场深度，挂单量'},{w:'price discovery',m:'价格发现，市场确定价格的过程'},{w:'momentum',m:'动量，价格延续趋势的倾向'},{w:'mean reversion',m:'均值回归，价格回归均值的倾向'},{w:'trend following',m:'趋势跟踪策略'},{w:'pairs trading',m:'配对交易，统计套利的一种'},{w:'high-frequency trading (HFT)',m:'高频交易'},{w:'latency',m:'延迟，信号传输时间'},{w:'co-location',m:'主机托管，将服务器放在交易所旁'},{w:'fill rate',m:'成交率'},{w:'tick size',m:'最小价格变动单位'},{w:'lot size',m:'标准合约单位'},{w:'open interest',m:'持仓量，未平仓合约数'},{w:'settlement',m:'结算，交割'},{w:'clearing',m:'清算，交易后的风险处理'},{w:'counterparty risk',m:'交易对手风险'},{w:'systemic risk',m:'系统性风险，整个市场的风险'},{w:'idiosyncratic risk',m:'特质风险，个别资产的风险'},{w:'diversification',m:'分散化，通过多样化降低风险'},
+]},
+{id:'fw2',title:'固定收益与衍生品（40词）',words:[
+{w:'yield',m:'收益率，债券的实际回报率'},{w:'coupon',m:'票面利率，债券定期支付的利息'},{w:'maturity',m:'到期日，债券的还款日期'},{w:'duration',m:'久期，债券价格对利率的敏感度'},{w:'convexity',m:'凸性，利率变化对久期的影响'},{w:'credit spread',m:'信用价差，债券收益率与无风险利率的差'},{w:'yield curve',m:'收益率曲线，不同期限利率的关系'},{w:'inverted yield curve',m:'倒挂收益率曲线，短期利率高于长期'},{w:'option',m:'期权，权利而非义务进行交易'},{w:'call option',m:'看涨期权，以固定价格买入的权利'},{w:'put option',m:'看跌期权，以固定价格卖出的权利'},{w:'strike price',m:'执行价格，期权的行权价格'},{w:'expiration date',m:'到期日，期权的最后执行日'},{w:'premium',m:'期权费，买期权支付的价格'},{w:'intrinsic value',m:'内在价值，期权立即执行的价值'},{w:'time value',m:'时间价值，期权剩余时间的价值'},{w:'implied volatility',m:'隐含波动率，市场对未来波动的预期'},{w:'delta',m:'Delta，期权价格对标的资产的敏感度'},{w:'gamma',m:'Gamma，Delta对标的资产价格的变化率'},{w:'vega',m:'Vega，期权价格对波动率的敏感度'},{w:'theta',m:'Theta，时间衰减，期权价值随时间减少'},{w:'rho',m:'Rho，期权价格对利率的敏感度'},{w:'futures',m:'期货，约定未来买卖的合约'},{w:'forward contract',m:'远期合约，场外的期货协议'},{w:'swap',m:'互换，交换现金流的协议'},{w:'interest rate swap',m:'利率互换'},{w:'credit default swap (CDS)',m:'信用违约互换，信用保险'},{w:'underlying asset',m:'标的资产，衍生品所依附的资产'},{w:'notional value',m:'名义价值，合约的名义金额'},{w:'mark-to-model',m:'按模型估值，针对非流动性资产'},
+]},
+{id:'fw3',title:'宏观与公司金融（40词）',words:[
+{w:'GDP',m:'国内生产总值，衡量经济总产出'},{w:'inflation',m:'通货膨胀，物价水平上升'},{w:'deflation',m:'通货紧缩，物价水平下降'},{w:'monetary policy',m:'货币政策，央行控制货币供应'},{w:'fiscal policy',m:'财政政策，政府收支政策'},{w:'interest rate',m:'利率，借贷资金的成本'},{w:'federal funds rate',m:'联邦基金利率，美联储基准利率'},{w:'quantitative easing (QE)',m:'量化宽松，央行购买资产注入流动性'},{w:'yield spread',m:'利差，两种债券收益率的差'},{w:'risk-free rate',m:'无风险利率，通常为国债收益率'},{w:'equity',m:'股权；净资产'},{w:'debt',m:'债务，借来的资金'},{w:'capital structure',m:'资本结构，债务与股权的比例'},{w:'WACC',m:'加权平均资本成本'},{w:'DCF',m:'折现现金流，估值方法'},{w:'valuation',m:'估值，评估公司价值'},{w:'P/E ratio',m:'市盈率，股价/每股收益'},{w:'EPS',m:'每股收益（Earnings Per Share）'},{w:'ROE',m:'净资产收益率（Return on Equity）'},{w:'ROA',m:'总资产收益率（Return on Assets）'},{w:'EBITDA',m:'息税折旧摊销前利润'},{w:'free cash flow',m:'自由现金流'},{w:'IPO',m:'首次公开募股'},{w:'M&A',m:'并购（Mergers and Acquisitions）'},{w:'due diligence',m:'尽职调查'},{w:'private equity',m:'私募股权'},{w:'venture capital',m:'风险投资'},{w:'hedge fund',m:'对冲基金'},{w:'asset management',m:'资产管理'},{w:'portfolio management',m:'投资组合管理'},{w:'benchmark',m:'基准，衡量业绩的参照标准'},{w:'index fund',m:'指数基金'},{w:'ETF',m:'交易所交易基金'},{w:'rebalancing',m:'再平衡，调整组合权重'},{w:'correlation coefficient',m:'相关系数'},{w:'efficient market hypothesis',m:'有效市场假说（EMH）'},{w:'factor model',m:'因子模型'},{w:'Fama-French model',m:'法马三因子模型'},{w:'CAPM',m:'资本资产定价模型'},{w:'information ratio',m:'信息比率，超额收益/跟踪误差'},
+]}
+];
+
+let greWords=[];
+let wordsDone=new Set();
+let openRp=new Set();
+let openGt=new Set();
+
+function loadGRE(){
+  try{
+    const d=JSON.parse(localStorage.getItem('gre_data2')||'{}');
+    if(d.words)greWords=d.words;
+    if(d.wordsDone)wordsDone=new Set(d.wordsDone);
+    if(d.openRp)openRp=new Set(d.openRp);
+    if(d.openGt)openGt=new Set(d.openGt);
+  }catch(e){}
+}
+function saveGRE(){
+  try{localStorage.setItem('gre_data2',JSON.stringify({words:greWords,wordsDone:[...wordsDone],openRp:[...openRp],openGt:[...openGt]}));}catch(e){}
+}
+function greTab(name,el){
+  document.querySelectorAll('.gre-panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('#gre-tabs .tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('gre-'+name).classList.add('on');
+  el.classList.add('on');
+}
+
+function wordRow(w,m,key){
+  const done=wordsDone.has(key);
+  return`<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="togWord('${key}')">
+<div style="width:16px;height:16px;border-radius:50%;border:1.5px solid ${done?'#4A7FE8':'var(--border)'};background:${done?'#4A7FE8':'none'};flex-shrink:0;display:flex;align-items:center;justify-content:center">${done?'<span style="color:white;font-size:9px;line-height:1">✓</span>':''}</div>
+<span style="font-size:13px;font-weight:${done?'400':'500'};color:${done?'var(--muted)':'var(--text)'};text-decoration:${done?'line-through':'none'};min-width:180px">${w}</span>
+<span style="font-size:12px;color:var(--muted);flex:1">${m}</span>
+</div>`;
+}
+
+function vocabStats(list,prefix,elId){
+  const total=list.reduce((a,s)=>a+s.words.length,0);
+  const done=list.reduce((a,s)=>a+s.words.filter(w=>wordsDone.has(prefix+w.w)).length,0);
+  const pct=Math.round(done/total*100);
+  document.getElementById(elId).innerHTML=`<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;flex:1"><div style="font-size:11px;color:var(--muted)">总词数</div><div style="font-size:20px;font-weight:700;color:var(--text)">${total}</div></div><div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;flex:1"><div style="font-size:11px;color:var(--muted)">已背</div><div style="font-size:20px;font-weight:700;color:#2D9E6B">${done}</div></div><div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;flex:1"><div style="font-size:11px;color:var(--muted)">完成度</div><div style="font-size:20px;font-weight:700;color:#4A7FE8">${pct}%</div></div>`;
+}
+
+function renderRoadmap(){
+  document.getElementById('roadmap-list').innerHTML=GRE_ROADMAP.map(p=>{
+    const isO=openRp.has(p.id);
+    return`<div class="roadmap-phase"><div class="rp-header" onclick="togRp('${p.id}')"><div class="rp-num" style="background:${p.color}20;color:${p.color}">${p.id.replace('r','')}</div><div class="rp-info"><div class="rp-title">${p.title}</div><div class="rp-meta">${p.meta}</div></div></div><div class="rp-body ${isO?'open':''}">${p.tasks.map(t=>`<div style="padding:7px 0;border-bottom:1px solid var(--border)"><div style="font-size:13px;color:var(--text)">${t.t}</div>${t.note?`<div style="font-size:11px;color:var(--muted);margin-top:2px">→ ${t.note}</div>`:''}</div>`).join('')}</div></div>`;
+  }).join('');
+}
+function renderQuant(){
+  document.getElementById('quant-list').innerHTML=GRE_QUANT.map(s=>{
+    const isO=openGt.has(s.id);
+    return`<div class="gre-topic"><div class="gt-header" onclick="togGt('${s.id}')"><span style="font-size:14px;font-weight:600;flex:1">${s.title}</span></div><div class="gt-body ${isO?'open':''}">${s.topics.map(t=>`<div style="padding:7px 0;border-bottom:1px solid var(--border)"><div style="font-size:13px;color:var(--text);font-weight:500">${t.n}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">${t.tip}</div></div>`).join('')}</div></div>`;
+  }).join('');
+}
+function renderVerbal(){
+  vocabStats(GRE_VERBAL,'gv_','vocab-stats');
+  document.getElementById('verbal-list').innerHTML=GRE_VERBAL.map(s=>{
+    const isO=openGt.has(s.id);
+    const done=s.words.filter(w=>wordsDone.has('gv_'+w.w)).length;
+    return`<div class="gre-topic"><div class="gt-header" onclick="togGt('${s.id}')"><span style="font-size:14px;font-weight:600;flex:1">${s.title}</span><span style="font-size:12px;color:var(--muted)">${done}/${s.words.length}</span></div><div class="gt-body ${isO?'open':''}">${s.words.map(w=>wordRow(w.w,w.m,'gv_'+w.w)).join('')}</div></div>`;
+  }).join('');
+}
+function renderQuantWords(){
+  vocabStats(QUANT_WORDS,'qw_','qw-stats');
+  document.getElementById('quantword-list').innerHTML=QUANT_WORDS.map(s=>{
+    const isO=openGt.has(s.id);
+    const done=s.words.filter(w=>wordsDone.has('qw_'+w.w)).length;
+    return`<div class="gre-topic"><div class="gt-header" onclick="togGt('${s.id}')"><span style="font-size:14px;font-weight:600;flex:1">${s.title}</span><span style="font-size:12px;color:var(--muted)">${done}/${s.words.length}</span></div><div class="gt-body ${isO?'open':''}">${s.words.map(w=>wordRow(w.w,w.m,'qw_'+w.w)).join('')}</div></div>`;
+  }).join('');
+}
+function renderFinWords(){
+  vocabStats(FIN_WORDS,'fw_','fw-stats');
+  document.getElementById('finword-list').innerHTML=FIN_WORDS.map(s=>{
+    const isO=openGt.has(s.id);
+    const done=s.words.filter(w=>wordsDone.has('fw_'+w.w)).length;
+    return`<div class="gre-topic"><div class="gt-header" onclick="togGt('${s.id}')"><span style="font-size:14px;font-weight:600;flex:1">${s.title}</span><span style="font-size:12px;color:var(--muted)">${done}/${s.words.length}</span></div><div class="gt-body ${isO?'open':''}">${s.words.map(w=>wordRow(w.w,w.m,'fw_'+w.w)).join('')}</div></div>`;
+  }).join('');
+}
+function renderMyWords(){
+  const el=document.getElementById('word-list');
+  if(!greWords.length){el.innerHTML='<div class="empty">还没有单词，把遇到的生词加进来</div>';return;}
+  el.innerHTML=greWords.map((w,i)=>{
+    const key='my_'+w.w;const done=wordsDone.has(key);
+    return`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+<div style="width:16px;height:16px;border-radius:50%;border:1.5px solid ${done?'#4A7FE8':'var(--border)'};background:${done?'#4A7FE8':'none'};cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center" onclick="togWord('${key}')">
+${done?'<span style="color:white;font-size:9px">✓</span>':''}</div>
+<span style="font-size:13px;font-weight:500;min-width:160px;color:${done?'var(--muted)':'var(--text)'};text-decoration:${done?'line-through':'none'}">${w.w}</span>
+<span style="font-size:12px;color:var(--muted);flex:1">${w.m}</span>
+<button onclick="delWord(${i})" style="font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;padding:3px 8px">删除</button>
+</div>`;
+  }).join('');
+}
+function togWord(key){
+  if(wordsDone.has(key))wordsDone.delete(key);else wordsDone.add(key);
+  saveGRE();renderVerbal();renderQuantWords();renderFinWords();renderMyWords();
+}
+function addWord(){
+  const w=document.getElementById('word-input').value.trim();
+  const m=document.getElementById('word-def').value.trim();
+  if(!w||!m)return;
+  greWords.push({w,m});
+  document.getElementById('word-input').value='';
+  document.getElementById('word-def').value='';
+  saveGRE();renderMyWords();
+}
+function delWord(i){greWords.splice(i,1);saveGRE();renderMyWords();}
+function togRp(id){if(openRp.has(id))openRp.delete(id);else openRp.add(id);saveGRE();renderRoadmap();}
+function togGt(id){
+  if(openGt.has(id))openGt.delete(id);else openGt.add(id);
+  saveGRE();renderQuant();renderVerbal();renderQuantWords();renderFinWords();
+}
+loadGRE();renderRoadmap();renderQuant();renderVerbal();renderQuantWords();renderFinWords();renderMyWords();
+</script>
+</body>
+</html>
