@@ -74,6 +74,19 @@ section{padding:4rem 2rem;max-width:900px;margin:0 auto;border-top:1px solid var
 .res-title{font-size:14px;font-weight:600;margin-bottom:4px}.res-desc{font-size:12px;color:var(--muted);line-height:1.5}
 .res-tip{font-size:11px;color:#555;margin-top:8px;font-style:italic}
 footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-size:12px;color:var(--muted)}
+.gre-panel{display:none}.gre-panel.on{display:block}
+.roadmap-phase{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.rp-header{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer}.rp-header:hover{background:var(--surface2)}
+.rp-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.rp-info{flex:1}.rp-title{font-size:14px;font-weight:600}.rp-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.rp-body{display:none;padding:12px 16px;border-top:1px solid var(--border)}.rp-body.open{display:block}
+.gre-topic{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden}
+.gt-header{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer}.gt-header:hover{background:var(--surface2)}
+.gt-body{display:none;padding:10px 14px;border-top:1px solid var(--border)}.gt-body.open{display:block}
+.word-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:6px;display:flex;align-items:center;gap:12px}
+.word-en{font-size:14px;font-weight:600;color:var(--text);min-width:140px}
+.word-zh{font-size:13px;color:var(--muted);flex:1}
+.word-del{font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;padding:3px 8px}.word-del:hover{color:#E84A6F}
 @media(max-width:600px){nav{padding:0 1rem}.nav-links{gap:1rem}.hero{padding:4rem 1rem 2rem}section{padding:2rem 1rem}.hero-stats{gap:1.5rem}}
 </style>
 </head>
@@ -83,6 +96,7 @@ footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-si
   <div class="nav-links">
     <a href="#curriculum">Curriculum</a>
     <a href="#projects">Projects</a>
+    <a href="#gre">GRE</a>
     <a href="#journal">Journal</a>
     <a href="#resume">Resume</a>
   </div>
@@ -117,6 +131,41 @@ footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-si
   <div class="sec-label">Hands-on work</div>
   <div class="sec-title">Projects</div>
   <div id="proj-list"></div>
+</section>
+<section id="gre">
+  <div class="sec-label">Test prep</div>
+  <div class="sec-title">GRE — Target 325+</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.5rem">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px"><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Quant target</div><div style="font-size:22px;font-weight:700;color:#4A7FE8">170</div><div style="font-size:11px;color:var(--muted)">Perfect score</div></div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px"><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Verbal target</div><div style="font-size:22px;font-weight:700;color:#E87D3E">155+</div><div style="font-size:11px;color:var(--muted)">Top 30%</div></div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px"><div style="font-size:11px;color:var(--muted);margin-bottom:3px">Exam date</div><div style="font-size:22px;font-weight:700;color:#2D9E6B" id="gre-days">~180d</div><div style="font-size:11px;color:var(--muted)">Dec 2026</div></div>
+  </div>
+  <div class="tabs" id="gre-tabs">
+    <button class="tab on" onclick="greTab('roadmap',this)">复习路径</button>
+    <button class="tab" onclick="greTab('quant',this)">Quant 知识点</button>
+    <button class="tab" onclick="greTab('verbal',this)">Verbal 词汇</button>
+    <button class="tab" onclick="greTab('words',this)">单词本</button>
+  </div>
+  <div id="gre-roadmap" class="gre-panel on">
+    <div id="roadmap-list"></div>
+  </div>
+  <div id="gre-quant" class="gre-panel">
+    <div id="quant-list"></div>
+  </div>
+  <div id="gre-verbal" class="gre-panel">
+    <div id="verbal-list"></div>
+  </div>
+  <div id="gre-words" class="gre-panel">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px">
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <input id="word-input" type="text" placeholder="单词（英文）" style="flex:1;font-size:13px;padding:6px 10px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:inherit">
+        <input id="word-def" type="text" placeholder="中文释义" style="flex:1.5;font-size:13px;padding:6px 10px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:inherit">
+        <button onclick="addWord()" style="font-size:12px;padding:6px 14px;border-radius:var(--radius);background:var(--accent);color:white;border:none;cursor:pointer;font-family:inherit">添加</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted)">记录你遇到的生词，考前复习用</div>
+    </div>
+    <div id="word-list"></div>
+  </div>
 </section>
 <section id="journal">
   <div class="sec-label">Daily log</div>
@@ -245,6 +294,209 @@ function saveNote(id){const el=document.getElementById('note-'+id);if(el){notes[
 function saveProjNote(id){const el=document.getElementById('pn-'+id);if(el){projNotes[id]=el.value;save();}const ns=document.getElementById('pns-'+id);if(ns){ns.style.display='inline';setTimeout(()=>ns.style.display='none',2000);}}
 function saveJ(){const text=document.getElementById('j-text').value.trim();if(!text)return;const tag=document.getElementById('j-tag').value;const date=new Date().toLocaleDateString('zh-CN',{month:'long',day:'numeric',weekday:'short'});journals.push({text,tag,date});document.getElementById('j-text').value='';save();updateStats();renderJ();}
 load();renderC();renderP();renderJ();renderR();updateStats();
+
+const GRE_ROADMAP=[
+{id:'r1',color:'#4A7FE8',title:'月1-2：诊断 + 基础建立',meta:'每天2小时 · 摸清底线，建立框架',tasks:[
+{t:'做一套完整模拟题（ETS Official free test）',note:'记录Quant和Verbal各自错题类型'},
+{t:'Quant：系统复习算术、代数、几何、数据分析',note:'重点：比例、百分比、数列、坐标几何'},
+{t:'Verbal：开始Manhattan 5lb或Magoosh词汇，每天30个',note:'重点背高频GRE词：Section 1核心500词'},
+{t:'每天做10道Quant练习题，保持手感',note:'目标：Quant正确率>90%'},
+{t:'Reading Comprehension：每天1篇，精读分析题目逻辑',note:'GRE RC考逻辑推断，不是翻译'},
+]},
+{id:'r2',color:'#2D9E6B',title:'月3-4：专项强化',meta:'每天2.5小时 · 攻克弱项，刷题量上来',tasks:[
+{t:'Quant：冲击满分，做ETS官方题库全部题目',note:'错一道分析一道，不允许同类型错第二次'},
+{t:'Verbal：词汇量冲到1500+，开始做TC/SE题',note:'Text Completion和Sentence Equivalence是送分题'},
+{t:'每周做一套完整mock test（计时）',note:'模拟真实考试压力，分析错误模式'},
+{t:'Writing：学习Issue和Argument模板',note:'AWA目标4.0，不需要太高，主要靠结构清晰'},
+{t:'RC：练习抓主旨、找论据、识别作者态度',note:'每篇文章做完后总结文章结构'},
+]},
+{id:'r3',color:'#E87D3E',title:'月5：冲刺模拟',meta:'每天3小时 · 全真模拟，查缺补漏',tasks:[
+{t:'每3天一套完整mock（ETS PowerPrep II + 第三方题库）',note:'目标稳定在320+'},
+{t:'Quant：专攻Data Interpretation，这是最容易丢分的地方',note:'图表题需要快速阅读数据，练速度'},
+{t:'Verbal：把错题本里的词全部过一遍',note:'做到看到词就秒出意思'},
+{t:'AWA：写5篇Issue + 5篇Argument，找人批改或用Grammarly',note:'30分钟写完，结构比内容更重要'},
+{t:'模拟考试时间管理：Quant每题<2分钟，Verbal每题<1.5分钟',note:'做不出来直接跳过，最后回来猜'},
+]},
+{id:'r4',color:'#9B6FD4',title:'月6：考前两周',meta:'减少新题，保持状态',tasks:[
+{t:'只做已经做过的题型，不引入新题库',note:'建立信心，不是发现新弱点'},
+{t:'每天复习错题本，词汇本全部过一遍',note:''},
+{t:'考前三天：轻度练习，保证睡眠',note:'状态比临时抱佛脚重要'},
+{t:'考试当天：先做Quant（最有把握），保持节奏',note:'Quant拿满分，Verbal稳住155+'},
+]}
+];
+
+const GRE_QUANT=[
+{id:'q1',title:'算术基础',topics:[
+{n:'整数、质数、因数、倍数',tip:'GRE最爱考：某数被3整除的条件，质因数分解'},
+{n:'分数、小数、百分比互转',tip:'百分比变化：增加20%再减20%≠原值，实际减少4%'},
+{n:'比例与比率',tip:'经典：混合问题、速度问题'},
+{n:'指数与根号',tip:'负数的偶次根不存在；根号下不能有负数'},
+{n:'绝对值',tip:'|x-3|<2的解法：-2<x-3<2，即1<x<5'},
+]},
+{id:'q2',title:'代数',topics:[
+{n:'一次方程与二次方程',tip:'韦达定理：两根之和=-b/a，两根之积=c/a'},
+{n:'不等式',tip:'两边乘以负数不等号翻转；变量符号未知时分类讨论'},
+{n:'函数与图像',tip:'GRE不考高等函数，主要考一次、二次函数图像'},
+{n:'数列（等差、等比）',tip:'等差数列求和：n×(首+尾)/2'},
+{n:'Quantitative Comparison题型',tip:'QC题：比较A和B的大小，选A大/B大/相等/无法确定'},
+]},
+{id:'q3',title:'几何',topics:[
+{n:'三角形：面积、勾股定理、特殊三角形',tip:'30-60-90：边比1:√3:2；45-45-90：边比1:1:√2'},
+{n:'圆：面积、周长、弧度、扇形',tip:'扇形面积=πr²×(圆心角/360)'},
+{n:'坐标几何：斜率、距离、中点',tip:'两点斜率=(y2-y1)/(x2-x1)；斜率×垂线斜率=-1'},
+{n:'多边形面积',tip:'GRE常考：梯形面积=(上底+下底)×高/2'},
+{n:'三维图形：体积、表面积',tip:'球体积=4/3πr³；圆柱体积=πr²h'},
+]},
+{id:'q4',title:'数据分析',topics:[
+{n:'均值、中位数、众数、极差',tip:'平均值被极端值影响大；中位数不受影响'},
+{n:'标准差与方差',tip:'GRE不要求计算标准差，只需理解大小关系'},
+{n:'概率',tip:'P(A或B)=P(A)+P(B)-P(A且B)；独立事件乘法'},
+{n:'排列组合',tip:'Permutation(顺序有关)：nPr=n!/(n-r)！；Combination：nCr=n!/(r!(n-r)!)'},
+{n:'图表读数（Data Interpretation）',tip:'最容易丢分：读图要仔细，注意单位、比例尺、是否是百分比还是绝对值'},
+]}
+];
+
+const GRE_VERBAL=[
+{id:'v1',title:'核心高频词 Level 1（必背500词）',words:[
+{w:'aberrant',m:'异常的，偏离正轨的'},
+{w:'abscond',m:'潜逃，秘密离开'},
+{w:'abstemious',m:'节制的，有节制饮食的'},
+{w:'acrimony',m:'尖刻，刻薄'},
+{w:'adulterate',m:'掺假，使纯度降低'},
+{w:'amalgamate',m:'合并，混合'},
+{w:'ambivalence',m:'矛盾心理，好恶参半'},
+{w:'ameliorate',m:'改善，改良'},
+{w:'anachronism',m:'时代错误，不合时宜的人/物'},
+{w:'anodyne',m:'止痛的；无害的，平淡无奇的'},
+{w:'antipathy',m:'厌恶，反感'},
+{w:'apocryphal',m:'真实性存疑的，伪造的'},
+{w:'approbation',m:'赞许，认可'},
+{w:'arduous',m:'艰难的，费力的'},
+{w:'artless',m:'朴实无华的，自然的；无技巧的'},
+{w:'ascetic',m:'苦行的，禁欲的'},
+{w:'assuage',m:'减轻（痛苦），平息'},
+{w:'attenuate',m:'削弱，使变细'},
+{w:'audacious',m:'大胆的，无畏的'},
+{w:'auspicious',m:'吉祥的，有利的'},
+{w:'avarice',m:'贪婪，吝啬'},
+{w:'banal',m:'陈腐的，平庸的'},
+{w:'belie',m:'掩盖，与…不符'},
+{w:'bellicose',m:'好战的，好斗的'},
+{w:'bemoan',m:'悲叹，为…哀愁'},
+{w:'benign',m:'良性的，温和的，无害的'},
+{w:'bolster',m:'支持，加强'},
+{w:'bombast',m:'夸大的言辞，高调'},
+{w:'boorish',m:'粗鲁的，粗野的'},
+{w:'burgeon',m:'迅速成长，繁荣'},
+]},
+{id:'v2',title:'核心高频词 Level 2',words:[
+{w:'cacophony',m:'刺耳的声音，不和谐'},
+{w:'capricious',m:'变化无常的，任性的'},
+{w:'castigation',m:'严厉批评，惩罚'},
+{w:'catalyst',m:'催化剂；促进变化的人/事'},
+{w:'caustic',m:'腐蚀性的；刻薄的，讽刺的'},
+{w:'chicanery',m:'欺骗，欺诈手段'},
+{w:'circumspect',m:'谨慎的，慎重的'},
+{w:'clamor',m:'喧嚣；强烈要求'},
+{w:'cloying',m:'令人腻烦的，过分甜腻的'},
+{w:'coalesce',m:'合并，联合'},
+{w:'cogent',m:'有说服力的，令人信服的'},
+{w:'complaisant',m:'顺从的，迁就的'},
+{w:'compliant',m:'服从的，顺从的'},
+{w:'convoluted',m:'复杂的，错综的'},
+{w:'corroborate',m:'证实，确认'},
+{w:'credulous',m:'轻信的，易受骗的'},
+{w:'culpable',m:'有罪的，该责备的'},
+{w:'daunt',m:'使气馁，使畏缩'},
+{w:'dearth',m:'缺乏，稀少'},
+{w:'decry',m:'公开谴责，强烈批评'},
+{w:'deferential',m:'顺从的，尊重的'},
+{w:'deleterious',m:'有害的，有毒的'},
+{w:'denounce',m:'谴责，揭发'},
+{w:'deplete',m:'耗尽，使减少'},
+{w:'deride',m:'嘲笑，嘲弄'},
+{w:'desiccate',m:'使干燥，脱水'},
+{w:'desultory',m:'散漫的，无目的的'},
+{w:'diffident',m:'缺乏自信的，羞怯的'},
+{w:'dilettante',m:'业余爱好者，浅尝者'},
+{w:'discern',m:'辨别，识别'},
+]},
+{id:'v3',title:'题型训练：Text Completion（TC）',words:[
+{w:'TC核心规则',m:'找"线索词"——句子里有一个词或短语能决定空格答案的情感方向'},
+{w:'正向关系',m:'although/but/however/yet → 转折；because/since/so → 因果'},
+{w:'负向关系',m:'not/never/far from/anything but → 否定，答案方向与表面相反'},
+{w:'同义重复',m:'空格答案通常是某个已知词的同义词或近义词，找到它填进去'},
+{w:'双空格策略',m:'先填有明确线索的那个空，再用逻辑关系确定另一个'},
+{w:'练习方法',m:'每天10题TC，每道题找出线索词，不要靠语感'},
+]},
+{id:'v4',title:'题型训练：Reading Comprehension（RC）',words:[
+{w:'主旨题',m:'问"main point/primary purpose"：答案通常是整篇文章的核心论点，不是某个细节'},
+{w:'推断题',m:'问"can be inferred"：答案必须100%从原文得出，不能加个人理解'},
+{w:'态度题',m:'找作者对某观点的情感：critical/skeptical/ambivalent/supportive'},
+{w:'功能题',m:'某句话/段落的作用：通常是举例、反驳、支持、引入'},
+{w:'阅读策略',m:'第一遍快读，找主旨和结构；第二遍带题目精读相关段落'},
+{w:'陷阱类型',m:'Too specific（过于具体）/ Too broad（过于宽泛）/ Opposite（方向相反）'},
+]}
+];
+
+let greWords=[];
+let openRp=new Set();
+let openGt=new Set();
+
+function loadGRE(){
+  try{
+    const d=JSON.parse(localStorage.getItem('gre_data')||'{}');
+    if(d.words)greWords=d.words;
+    if(d.openRp)openRp=new Set(d.openRp);
+    if(d.openGt)openGt=new Set(d.openGt);
+  }catch(e){}
+}
+function saveGRE(){
+  try{localStorage.setItem('gre_data',JSON.stringify({words:greWords,openRp:[...openRp],openGt:[...openGt]}));}catch(e){}
+}
+function greTab(name,el){
+  document.querySelectorAll('.gre-panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('#gre-tabs .tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('gre-'+name).classList.add('on');
+  el.classList.add('on');
+}
+function renderRoadmap(){
+  document.getElementById('roadmap-list').innerHTML=GRE_ROADMAP.map(p=>{
+    const isO=openRp.has(p.id);
+    return`<div class="roadmap-phase"><div class="rp-header" onclick="togRp('${p.id}')"><div class="rp-num" style="background:${p.color}20;color:${p.color}">${p.id.replace('r','')}</div><div class="rp-info"><div class="rp-title">${p.title}</div><div class="rp-meta">${p.meta}</div></div></div><div class="rp-body ${isO?'open':''}">${p.tasks.map(t=>`<div style="padding:7px 0;border-bottom:1px solid var(--border)"><div style="font-size:13px;color:var(--text)">${t.t}</div>${t.note?`<div style="font-size:11px;color:var(--muted);margin-top:2px">→ ${t.note}</div>`:''}</div>`).join('')}</div></div>`;
+  }).join('');
+}
+function renderQuant(){
+  document.getElementById('quant-list').innerHTML=GRE_QUANT.map(s=>{
+    const isO=openGt.has(s.id);
+    return`<div class="gre-topic"><div class="gt-header" onclick="togGt('${s.id}')"><span style="font-size:14px;font-weight:600;flex:1">${s.title}</span></div><div class="gt-body ${isO?'open':''}">${s.topics.map(t=>`<div style="padding:7px 0;border-bottom:1px solid var(--border)"><div style="font-size:13px;color:var(--text);font-weight:500">${t.n}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">${t.tip}</div></div>`).join('')}</div></div>`;
+  }).join('');
+}
+function renderVerbal(){
+  document.getElementById('verbal-list').innerHTML=GRE_VERBAL.map(s=>{
+    const isO=openGt.has(s.id);
+    return`<div class="gre-topic"><div class="gt-header" onclick="togGt('${s.id}')"><span style="font-size:14px;font-weight:600;flex:1">${s.title}</span><span style="font-size:12px;color:var(--muted)">${s.words.length}条</span></div><div class="gt-body ${isO?'open':''}">${s.words.map(w=>`<div style="padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:12px"><span style="font-size:13px;font-weight:500;color:var(--text);min-width:160px">${w.w}</span><span style="font-size:12px;color:var(--muted)">${w.m}</span></div>`).join('')}</div></div>`;
+  }).join('');
+}
+function renderWords(){
+  const el=document.getElementById('word-list');
+  if(!greWords.length){el.innerHTML='<div class="empty">还没有单词，把你遇到的生词加进来</div>';return;}
+  el.innerHTML=greWords.map((w,i)=>`<div class="word-card"><span class="word-en">${w.w}</span><span class="word-zh">${w.m}</span><button class="word-del" onclick="delWord(${i})">删除</button></div>`).join('');
+}
+function addWord(){
+  const w=document.getElementById('word-input').value.trim();
+  const m=document.getElementById('word-def').value.trim();
+  if(!w||!m)return;
+  greWords.push({w,m});
+  document.getElementById('word-input').value='';
+  document.getElementById('word-def').value='';
+  saveGRE();renderWords();
+}
+function delWord(i){greWords.splice(i,1);saveGRE();renderWords();}
+function togRp(id){if(openRp.has(id))openRp.delete(id);else openRp.add(id);saveGRE();renderRoadmap();}
+function togGt(id){if(openGt.has(id))openGt.delete(id);else openGt.add(id);saveGRE();renderQuant();renderVerbal();}
+
+loadGRE();renderRoadmap();renderQuant();renderVerbal();renderWords();
 </script>
 </body>
 </html>
