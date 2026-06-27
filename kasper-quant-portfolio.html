@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kasper Ge — Quant Learning Portfolio</title>
+<style>
+:root{--bg:#0a0a0a;--surface:#111;--surface2:#1a1a1a;--border:#222;--text:#e8e8e8;--muted:#666;--accent:#4A7FE8;--green:#2D9E6B;--orange:#E87D3E;--purple:#9B6FD4;--red:#E84A6F;--yellow:#E8B84A}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6}
+nav{position:sticky;top:0;z-index:100;background:rgba(10,10,10,.95);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;backdrop-filter:blur(8px)}
+.nav-logo{font-size:15px;font-weight:600}.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:2rem}.nav-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}.nav-links a:hover{color:var(--text)}
+.hero{padding:6rem 2rem 4rem;max-width:900px;margin:0 auto}
+.hero-tag{font-size:12px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem}
+.hero h1{font-size:clamp(32px,5vw,52px);font-weight:700;line-height:1.1;margin-bottom:1.25rem}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero-desc{font-size:16px;color:var(--muted);max-width:580px;line-height:1.7;margin-bottom:2rem}
+.hero-stats{display:flex;gap:2.5rem;flex-wrap:wrap}
+.hstat-v{font-size:28px;font-weight:700}.hstat-l{font-size:12px;color:var(--muted);margin-top:2px}
+.progress-wrap{margin-top:2rem}.progress-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
+.progress-track{height:4px;background:var(--surface2);border-radius:100px;overflow:hidden}
+.progress-fill{height:100%;border-radius:100px;background:var(--accent);transition:width 1s ease}
+section{padding:4rem 2rem;max-width:900px;margin:0 auto;border-top:1px solid var(--border)}
+.sec-label{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+.sec-title{font-size:24px;font-weight:600;margin-bottom:2rem}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:1.5rem}
+.tab{font-size:13px;padding:8px 14px;cursor:pointer;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit;transition:color .2s}
+.tab:hover{color:var(--text)}.tab.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.subj{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px}
+.subj-header{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer}.subj-header:hover{background:var(--surface2)}
+.subj-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.subj-info{flex:1;min-width:0}.subj-name{font-size:14px;font-weight:600}.subj-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.subj-pct{font-size:13px;font-weight:600;color:var(--accent)}
+.subj-bar{height:3px;background:var(--surface2)}.subj-bar-fill{height:100%;transition:width .4s}
+.topics{display:none;padding:10px 16px;border-top:1px solid var(--border)}.topics.open{display:block}
+.topic{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);cursor:pointer}.topic:last-child{border-bottom:none}
+.chk{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.chk.done{background:var(--accent);border-color:var(--accent)}.chk.done::after{content:'';width:7px;height:4px;border-left:1.5px solid white;border-bottom:1.5px solid white;transform:rotate(-45deg) translateY(-1px);display:block}
+.topic-name{font-size:13px;flex:1}.topic-name.done{color:var(--muted);text-decoration:line-through}
+.tag{font-size:10px;padding:2px 8px;border-radius:100px}
+.tag-interview{background:rgba(232,184,74,.15);color:var(--yellow)}.tag-project{background:rgba(45,158,107,.15);color:var(--green)}.tag-core{background:rgba(74,127,232,.15);color:var(--accent)}
+.expand-btn{font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;padding:3px 0 0 26px;display:flex;align-items:center;gap:4px;margin-top:2px}.expand-btn:hover{color:var(--text)}
+.lesson{display:none;margin:6px 0 4px 26px;padding:12px;background:var(--surface2);border-radius:8px;border-left:2px solid var(--accent)}.lesson.open{display:block}
+.lsec{font-size:10px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;margin-top:10px}.lsec:first-child{margin-top:0}
+.ltext{font-size:12px;color:#aaa;line-height:1.6}
+.lcode{font-family:'SF Mono','Fira Code',monospace;font-size:11px;background:#000;padding:10px;border-radius:6px;color:#ccc;white-space:pre-wrap;margin-top:4px;overflow-x:auto}
+.note-area{width:100%;background:#000;border:1px solid var(--border);border-radius:6px;padding:8px;font-size:12px;color:var(--text);font-family:inherit;resize:vertical;min-height:60px;margin-top:8px;line-height:1.5}
+.note-area::placeholder{color:var(--muted)}.save-btn{margin-top:6px;font-size:11px;padding:4px 12px;border-radius:6px;background:var(--accent);color:white;border:none;cursor:pointer}
+.saved-msg{font-size:11px;color:var(--green);margin-left:8px;display:none}
+.proj{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px}
+.proj-header{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;cursor:pointer}.proj-header:hover{background:var(--surface2)}
+.proj-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.proj-info{flex:1}.proj-title{font-size:14px;font-weight:600}.proj-desc{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.5}
+.proj-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.proj-status{font-size:11px;padding:3px 10px;border-radius:100px;flex-shrink:0}
+.st-done{background:rgba(45,158,107,.15);color:var(--green)}.st-prog{background:rgba(232,184,74,.15);color:var(--yellow)}.st-todo{background:var(--surface2);color:var(--muted)}
+.proj-body{display:none;padding:14px 16px;border-top:1px solid var(--border)}.proj-body.open{display:block}
+.step-list{list-style:none;margin:8px 0 14px}.step{font-size:12px;color:#aaa;padding:4px 0 4px 16px;position:relative;line-height:1.5}.step::before{content:'→';position:absolute;left:0;color:var(--muted)}
+.proj-note{width:100%;background:#000;border:1px solid var(--border);border-radius:6px;padding:8px;font-size:12px;color:var(--text);font-family:inherit;resize:vertical;min-height:80px;margin-top:8px;line-height:1.5}
+.proj-note::placeholder{color:var(--muted)}
+.sec-label2{font-size:10px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin:10px 0 4px}
+.j-input{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.j-input textarea{width:100%;background:none;border:none;outline:none;font-size:13px;color:var(--text);font-family:inherit;resize:none;min-height:70px;line-height:1.6}
+.j-input textarea::placeholder{color:var(--muted)}
+.j-actions{display:flex;gap:8px;margin-top:8px;align-items:center}
+.j-sel{font-size:12px;padding:5px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:inherit;cursor:pointer}
+.j-save{font-size:12px;padding:5px 14px;border-radius:6px;background:var(--accent);color:white;border:none;cursor:pointer;font-family:inherit}
+.j-entry{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.j-date{font-size:11px;color:var(--muted);margin-bottom:5px;display:flex;align-items:center;gap:8px}
+.j-text{font-size:13px;color:#ccc;line-height:1.6}
+.empty{text-align:center;padding:2rem;color:var(--muted);font-size:13px}
+.res-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:8px}
+.res-title{font-size:14px;font-weight:600;margin-bottom:4px}.res-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.res-tip{font-size:11px;color:#555;margin-top:8px;font-style:italic}
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-size:12px;color:var(--muted)}
+@media(max-width:600px){nav{padding:0 1rem}.nav-links{gap:1rem}.hero{padding:4rem 1rem 2rem}section{padding:2rem 1rem}.hero-stats{gap:1.5rem}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">Kasper <span>Ge</span></div>
+  <div class="nav-links">
+    <a href="#curriculum">Curriculum</a>
+    <a href="#projects">Projects</a>
+    <a href="#journal">Journal</a>
+    <a href="#resume">Resume</a>
+  </div>
+</nav>
+<div class="hero">
+  <div class="hero-tag">Quant Learning Portfolio</div>
+  <h1>Building toward<br><em>top quant firms</em><br>&amp; US grad programs</h1>
+  <p class="hero-desc">Self-directed quantitative finance education. Targeting trader / quant researcher roles at Optiver, Jane Street, Citadel. Applying to Columbia MFE, NYU MathFin, CMU MSCF.</p>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hstat-v" id="h-pct">0%</div><div class="hstat-l">Overall progress</div></div>
+    <div class="hstat"><div class="hstat-v" id="h-done">0</div><div class="hstat-l">Topics completed</div></div>
+    <div class="hstat"><div class="hstat-v" id="h-proj">0</div><div class="hstat-l">Projects active</div></div>
+    <div class="hstat"><div class="hstat-v" id="h-days">1</div><div class="hstat-l">Days in</div></div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Total curriculum progress</span><span id="h-pct2">0%</span></div>
+    <div class="progress-track"><div class="progress-fill" id="h-bar" style="width:0%"></div></div>
+  </div>
+</div>
+<section id="curriculum">
+  <div class="sec-label">Self-directed study</div>
+  <div class="sec-title">Curriculum</div>
+  <div class="tabs">
+    <button class="tab on" onclick="stab('all',this)">全部</button>
+    <button class="tab" onclick="stab('interview',this)">面试题</button>
+    <button class="tab" onclick="stab('project',this)">项目</button>
+    <button class="tab" onclick="stab('core',this)">基础</button>
+  </div>
+  <div id="subj-list"></div>
+</section>
+<section id="projects">
+  <div class="sec-label">Hands-on work</div>
+  <div class="sec-title">Projects</div>
+  <div id="proj-list"></div>
+</section>
+<section id="journal">
+  <div class="sec-label">Daily log</div>
+  <div class="sec-title">学习日志</div>
+  <div class="j-input">
+    <textarea id="j-text" placeholder="今天学了什么？遇到什么困难？有什么顿悟？写下来..."></textarea>
+    <div class="j-actions">
+      <select class="j-sel" id="j-tag"><option>概率统计</option><option>Python</option><option>策略研究</option><option>数学</option><option>面试准备</option><option>项目</option><option>GRE</option><option>其他</option></select>
+      <button class="j-save" onclick="saveJ()">保存记录</button>
+    </div>
+  </div>
+  <div id="j-list"></div>
+</section>
+<section id="resume">
+  <div class="sec-label">Application materials</div>
+  <div class="sec-title">Resume &amp; Portfolio</div>
+  <div id="res-list"></div>
+</section>
+<footer>Kasper Ge · UNSW Finance · Building toward top quant programs · Started June 2026</footer>
+<script>
+const C=[
+{id:'prob',icon:'🎲',color:'#4A7FE8',title:'Probability & Statistics',desc:'Core of quant interviews',topics:[
+{id:'p1',n:'期望值 & 大数定律',tag:'interview',l:{c:'期望值=每种结果×其概率之和。大数定律：重复足够多次，实际均值趋近期望值。这是所有做市商策略的数学基础。',e:'硬币游戏：正面+2元，反面-1元。E=0.5×2+0.5×(-1)=+0.5元。每次期望赢0.5元。',code:'import random\nresults=[]\nfor i in range(10000):\n    results.append(2 if random.random()>0.5 else -1)\nprint(f"实际均值: {sum(results)/len(results):.4f}")'}},
+{id:'p2',n:'Kelly公式 & 仓位管理',tag:'interview',l:{c:'Kelly比例=(p×b-q)/b。这是在正期望值游戏中长期增长最快的押注比例。超过Kelly会导致破产。',e:'押25%→374亿；押50%→归零。方向对了但仓位错了，一样亏光。',code:'def kelly(p_win,odds):\n    return (p_win*odds-(1-p_win))/odds\nprint(f"最优押注: {kelly(0.5,2)*100:.1f}%")'}},
+{id:'p3',n:'条件概率 & 贝叶斯定理',tag:'interview',l:{c:'P(A|B)=P(B|A)×P(A)/P(B)。贝叶斯是用新证据更新已有信念的数学工具。面试高频题。',e:'疾病发病率1%，检测准确率99%。检测阳性，真正患病概率只有约50%，反直觉。',code:'p_d=0.01;p_p_d=0.99;p_p_h=0.01\np_p=p_p_d*p_d+p_p_h*(1-p_d)\nresult=p_p_d*p_d/p_p\nprint(f"阳性时患病率: {result:.1%}")'}},
+{id:'p4',n:'随机变量 & 常见分布',tag:'core',l:{c:'正态分布、泊松分布、二项分布。金融资产收益率近似正态分布，极端事件（肥尾）是例外。',e:'股票日收益率：均值约0，标准差约1-2%。2σ事件理论上2.3%概率，实际更频繁。',code:'import numpy as np\nreturns=np.random.normal(0,0.01,252)\nprint(f"年化收益: {returns.sum()*100:.2f}%")\nprint(f"年化波动: {returns.std()*np.sqrt(252)*100:.2f}%")'}},
+{id:'p5',n:'中心极限定理',tag:'core',l:{c:'无论原始分布如何，足够多独立同分布随机变量之和趋近正态分布。',e:'掷骰子单次均匀分布，但1000次之和几乎完美正态。',code:'import numpy as np\nsamples=[np.random.randint(1,7,100).sum() for _ in range(10000)]\nprint(f"均值: {np.mean(samples):.2f}")'}},
+{id:'p6',n:'蒙特卡洛模拟',tag:'project',l:{c:'用大量随机模拟估算复杂问题的概率分布。当数学解析解很难求时，模拟是强大替代工具。',e:'估算π：在单位正方形内随机撒点，落在内切圆内的比例×4≈π。',code:'import random\ndef estimate_pi(n):\n    inside=sum(1 for _ in range(n) if random.random()**2+random.random()**2<1)\n    return 4*inside/n\nprint(f"π ≈ {estimate_pi(1000000):.5f}")'}},
+{id:'p7',n:'假设检验 & p值',tag:'core',l:{c:'p<0.05意味着结果在零假设下出现概率<5%。用来验证策略是否真的有效而非运气。',e:'策略100次交易胜率60%，p=0.028，可以在5%水平拒绝零假设。',code:'from scipy import stats\nresult=stats.binomtest(60,100,0.5)\nprint(f"p值: {result.pvalue:.4f}")\nprint("显著" if result.pvalue<0.05 else "不显著")'}},
+{id:'p8',n:'相关性 & 协方差矩阵',tag:'core',l:{c:'相关系数∈[-1,1]，衡量两变量线性关系。协方差矩阵是构建投资组合的核心工具。',e:'黄金和美债通常负相关；同板块股票高度正相关。',code:'import numpy as np\ngold=np.random.normal(0,1,252)\nbond=-0.3*gold+np.random.normal(0,0.9,252)\nprint(f"相关性: {np.corrcoef(gold,bond)[0,1]:.3f}")'}}
+]},
+{id:'python',icon:'🐍',color:'#2D9E6B',title:'Python Programming',desc:'Zero to writing real quant strategies',topics:[
+{id:'py1',n:'变量、运算、print',tag:'core',l:{c:'变量是存储数据的容器。Python不需要声明类型，直接赋值即可。',e:'bankroll=100；bet=bankroll*0.25；print(bet)→25.0',code:'bankroll=500\nkelly_fraction=0.25\nbet=bankroll*kelly_fraction\nprint(f"每次押注: {bet}元")'}},
+{id:'py2',n:'条件判断 if/else',tag:'core',l:{c:'if条件为真执行一段代码，else执行另一段。所有策略逻辑的基础。',e:'if bankroll>0: print("有钱") else: print("没钱")',code:'bankroll=80\nif bankroll<100:\n    print("资金警告")\nelse:\n    print("正常运行")'}},
+{id:'py3',n:'循环 for & while',tag:'core',l:{c:'for循环遍历序列；while循环在条件为真时持续执行。模拟交易、回测都靠循环。',e:'for i in range(10): 模拟10次交易',code:'import random\nbankroll=100\nfor i in range(10):\n    bet=bankroll*0.25\n    win=random.random()>0.5\n    bankroll+=bet*2 if win else -bet\n    print(f"第{i+1}次: {bankroll:.2f}元")'}},
+{id:'py4',n:'函数 def',tag:'core',l:{c:'把重复用到的逻辑封装成函数，一次定义，多次调用。',e:'def kelly(p,odds): return (p*odds-(1-p))/odds',code:'def kelly(p_win,odds):\n    return (p_win*odds-(1-p_win))/odds\nprint(kelly(0.5,2))'}},
+{id:'py5',n:'列表 & 字典',tag:'core',l:{c:'列表[]存储有序序列；字典{}存储键值对。最常用的两种数据结构。',e:'prices=[100,102,98]；signals={"BOS":True}',code:'prices=[100,102,98,105,103,108]\nreturns=[(prices[i]-prices[i-1])/prices[i-1] for i in range(1,len(prices))]\nprint(returns)'}},
+{id:'py6',n:'NumPy 数组运算',tag:'core',l:{c:'NumPy用向量化运算替代Python循环，速度快100x。处理价格序列的核心库。',e:'np.mean(), np.std(), np.corrcoef()',code:'import numpy as np\nprices=np.array([100,102,98,105,103,108,112])\nreturns=np.diff(prices)/prices[:-1]\nprint(f"平均日收益: {np.mean(returns):.4f}")\nprint(f"累计收益: {(prices[-1]/prices[0]-1):.2%}")'}},
+{id:'py7',n:'Pandas 数据处理',tag:'core',l:{c:'Pandas处理表格数据。DataFrame就像Excel表格，用代码操作。',e:'df["close"].pct_change()计算收益率；df.rolling(20).mean()计算移动均线',code:'import pandas as pd,numpy as np\ndates=pd.date_range("2024-01-01",periods=100)\nprices=100+np.cumsum(np.random.normal(0,1,100))\ndf=pd.DataFrame({"close":prices},index=dates)\ndf["ma20"]=df["close"].rolling(20).mean()\nprint(df.tail())'}},
+{id:'py8',n:'Matplotlib 可视化',tag:'project',l:{c:'量化研究的标配可视化工具。好的可视化是研究报告的核心。',e:'plt.plot()折线图；plt.hist()分布图',code:'import matplotlib.pyplot as plt,numpy as np\nreturns=np.random.normal(0,1,252)\nplt.plot(np.cumsum(returns))\nplt.title("资金曲线")\nplt.show()'}},
+{id:'py9',n:'yfinance 获取市场数据',tag:'project',l:{c:'免费获取股票、ETF、外汇历史数据。这是回测真实策略的数据来源。',e:'yf.download("GC=F") 获取黄金期货历史数据',code:'import yfinance as yf\ngold=yf.download("GC=F",start="2020-01-01")\nreturns=gold["Close"].pct_change().dropna()\nprint(f"年化收益: {returns.mean()*252:.2%}")'}},
+{id:'py10',n:'面向对象 class',tag:'core',l:{c:'用class把数据和方法封装在一起。回测框架通常用面向对象设计。',e:'class Strategy: def generate_signal(self): ...',code:'class KellyStrategy:\n    def __init__(self,p_win,odds):\n        self.kelly=(p_win*odds-(1-p_win))/odds\n    def bet_size(self,bankroll):\n        return bankroll*self.kelly\ns=KellyStrategy(0.55,2)\nprint(f"应押: {s.bet_size(100):.2f}元")'}}
+]},
+{id:'math',icon:'∑',color:'#9B6FD4',title:'Mathematics',desc:'Core math tools for quant research',topics:[
+{id:'m1',n:'线性代数：矩阵 & 向量',tag:'core',l:{c:'矩阵是二维数组，向量是一维数组。投资组合权重是向量；协方差矩阵是矩阵。',e:'组合收益=权重向量·资产收益向量（点积）',code:'import numpy as np\nweights=np.array([0.4,0.3,0.3])\nreturns=np.array([0.05,0.08,-0.02])\nprint(f"组合收益: {np.dot(weights,returns):.2%}")'}},
+{id:'m2',n:'微积分：导数 & 梯度下降',tag:'core',l:{c:'导数衡量函数变化率。梯度下降用导数找函数最小值，是参数优化的核心算法。',e:'找Kelly公式最优解就是对增长率函数求导并令导数=0',code:'def f(x): return (x-3)**2+2\ndef df(x): return 2*(x-3)\nx=0;lr=0.1\nfor i in range(20):\n    x-=lr*df(x)\nprint(f"最小值点: x={x:.4f}")'}},
+{id:'m3',n:'时间序列：平稳性 & 自相关',tag:'core',l:{c:'平稳时间序列均值和方差不随时间变化。ADF检验是最常用的平稳性检验。',e:'股票价格非平稳（有趋势）；股票收益率近似平稳。',code:'# pip install statsmodels\nfrom statsmodels.tsa.stattools import adfuller\nimport numpy as np\nreturns=np.random.normal(0,1,252)\nresult=adfuller(returns)\nprint(f"p值: {result[1]:.4f}")'}},
+{id:'m4',n:'回归分析（OLS）',tag:'core',l:{c:'用自变量预测因变量。因子模型核心：收益率=α+β×因子+ε。',e:'CAPM: 股票超额收益=α+β×市场超额收益',code:'import numpy as np\nmkt=np.random.normal(0,1,252)\nstock=0.02+1.2*mkt+np.random.normal(0,0.5,252)\nA=np.column_stack([np.ones(252),mkt])\nalpha,beta=np.linalg.lstsq(A,stock,rcond=None)[0]\nprint(f"Alpha: {alpha:.4f}, Beta: {beta:.4f}")'}},
+{id:'m5',n:'随机过程：布朗运动',tag:'core',l:{c:'几何布朗运动（GBM）是最基础的股价模型，Black-Scholes期权定价基于此。',e:'dS=μS·dt+σS·dW，μ是漂移率，σ是波动率',code:'import numpy as np\ndt=1/252;mu=0.05;sigma=0.2;S0=100\ndW=np.random.normal(0,np.sqrt(dt),252)\nS=S0*np.exp(np.cumsum((mu-0.5*sigma**2)*dt+sigma*dW))\nprint(f"期末价格: {S[-1]:.2f}")'}},
+{id:'m6',n:'最优化：约束优化',tag:'core',l:{c:'在满足约束条件下最大化/最小化目标函数。投资组合优化：最大化夏普比率，约束权重之和=1。',e:'scipy.optimize是Python解决优化问题的标配工具',code:'from scipy.optimize import minimize\nimport numpy as np\nrets=np.array([0.1,0.15,0.08])\ncov=np.eye(3)*0.04\ndef neg_sharpe(w): return -np.dot(w,rets)/np.sqrt(w@cov@w)\nresult=minimize(neg_sharpe,[1/3,1/3,1/3],constraints={"type":"eq","fun":lambda w:sum(w)-1},bounds=[(0,1)]*3)\nprint(f"最优权重: {result.x.round(3)}")'}}
+]},
+{id:'strat',icon:'📈',color:'#E87D3E',title:'Quant Strategy Research',desc:'From logic to projects with real performance records',topics:[
+{id:'s1',n:'回测框架搭建',tag:'project',l:{c:'回测核心：数据获取→信号生成→仓位管理→绩效评估。避免前视偏差、过拟合、忽略交易成本。',e:'下载历史价格→计算指标→生成信号→模拟持仓→计算收益率',code:'import pandas as pd,numpy as np,yfinance as yf\ndef backtest(ticker,fast,slow):\n    df=yf.download(ticker,start="2020-01-01")["Close"].to_frame("c")\n    df["f"]=df["c"].rolling(fast).mean()\n    df["s"]=df["c"].rolling(slow).mean()\n    df["sig"]=np.where(df["f"]>df["s"],1,-1)\n    strat=df["sig"].shift(1)*df["c"].pct_change()\n    return strat.mean()/strat.std()*252**0.5\nprint(f"夏普: {backtest(\'GC=F\',20,50):.3f}")'}},
+{id:'s2',n:'绩效指标：夏普、回撤、胜率',tag:'interview',l:{c:'夏普比率（风险调整后收益）、最大回撤（最大峰谷跌幅）、胜率、盈亏比。面试必问。',e:'夏普>1良好，>2优秀；最大回撤>30%通常不可接受',code:'import numpy as np,pandas as pd\ndef perf(r):\n    sr=r.mean()/r.std()*252**0.5\n    cum=(1+r).cumprod()\n    mdd=((cum-cum.cummax())/cum.cummax()).min()\n    return {"夏普":round(sr,3),"最大回撤":f"{mdd:.2%}","胜率":f"{(r>0).mean():.2%}"}\nr=pd.Series(np.random.normal(0.0003,0.01,252))\nprint(perf(r))'}},
+{id:'s3',n:'动量策略',tag:'core',l:{c:'过去表现好的资产未来倾向继续表现好。时间序列动量：近期收益为正则做多。',e:'12-1月动量因子：用过去12个月收益排名，跳过最近1个月',code:'import yfinance as yf,numpy as np\ngold=yf.download("GC=F",period="3y")["Close"]\nreturns=gold.pct_change()\nmomentum=returns.rolling(60).sum().shift(1)\nstrat=returns*np.sign(momentum)\nprint(f"动量策略夏普: {strat.mean()/strat.std()*252**0.5:.3f}")'}},
+{id:'s4',n:'均值回归策略',tag:'core',l:{c:'价格偏离均值后倾向回归。布林带策略：价格偏离2σ时反向交易。',e:'价格超过上轨做空，跌破下轨做多',code:'import yfinance as yf,numpy as np,pandas as pd\ngold=yf.download("GC=F",period="2y")["Close"]\nma=gold.rolling(20).mean()\nstd=gold.rolling(20).std()\nsignal=np.where(gold>ma+2*std,-1,np.where(gold<ma-2*std,1,0))\nstrat=pd.Series(signal).shift(1)*gold.pct_change()\nprint(f"均值回归夏普: {strat.mean()/strat.std()*252**0.5:.3f}")'}},
+{id:'s5',n:'做市商逻辑 & 买卖价差',tag:'interview',l:{c:'做市商同时报买价和卖价，赚取价差。核心：如何定价、如何管理库存。',e:'如果你为XAUUSD做市，报价1900/1901，买家来了1000手，价格风险如何管理？',code:'import random\nspread=0.5;position=0;pnl=[]\nfor _ in range(1000):\n    side=random.choice(["buy","sell"])\n    if side=="buy": position-=1;pnl.append(spread/2)\n    else: position+=1;pnl.append(spread/2)\n    pnl[-1]-=abs(position)*0.01\nprint(f"总P&L: {sum(pnl):.2f}")'}},
+{id:'s6',n:'因子模型',tag:'core',l:{c:'用可观测市场因子解释和预测收益。Fama-French三因子：市场、规模、价值。',e:'找到一个新因子，用统计方法证明它能预测未来收益',code:'import numpy as np\nmkt=np.random.normal(0.0004,0.01,252)\nsmb=np.random.normal(0.0001,0.008,252)\nstock=0.0002+1.1*mkt+0.3*smb+np.random.normal(0,0.005,252)\nX=np.column_stack([np.ones(252),mkt,smb])\ncoef=np.linalg.lstsq(X,stock,rcond=None)[0]\nprint(f"Alpha={coef[0]:.6f}, Beta={coef[1]:.3f}")'}},
+{id:'s7',n:'风险管理 & VaR',tag:'interview',l:{c:'VaR(95%,1天)=1%：95%置信度下明天最大亏损不超过1%。超过就触发警报。',e:'超过VaR就触发警报，超过最大回撤限制就强制减仓',code:'import numpy as np\ndef var_es(returns,confidence=0.95):\n    var=np.percentile(returns,(1-confidence)*100)\n    es=returns[returns<=var].mean()\n    return var,es\nreturns=np.random.normal(0,0.01,252)\nvar,es=var_es(returns)\nprint(f"VaR(95%): {var:.2%}")'}},
+{id:'s8',n:'高频交易基础概念',tag:'interview',l:{c:'HFT依赖低延迟基础设施、市场微观结构理解（订单簿）和统计套利信号。',e:'订单簿失衡：买单远多于卖单时，短期价格上涨概率更高',code:'import random\ndef oi(b,a): return (b-a)/(b+a)\nfor _ in range(5):\n    b=random.randint(100,1000);a=random.randint(100,1000)\n    o=oi(b,a)\n    print(f"OI={o:.3f} → {\"看涨\" if o>0.2 else \"看跌\" if o<-0.2 else \"中性\"}")'}}
+]},
+{id:'interview',icon:'🎯',color:'#E84A6F',title:'Interview Training',desc:'Optiver / Jane Street / Citadel real questions',topics:[
+{id:'i1',n:'概率脑筋急转弯：基础',tag:'interview',l:{c:'掷硬币、摸球、生日问题。Jane Street电话一面必考，要求秒出答案并说出完整推理。',e:'生日问题：房间里需要多少人才能有>50%概率两人同天生日？答案：23人',code:'import random\ndef birthday_sim(n,trials=100000):\n    return sum(len(set([random.randint(1,365) for _ in range(n)]))<n for _ in range(trials))/trials\nfor n in [20,23,30]:\n    print(f"{n}人重复概率: {birthday_sim(n):.3f}")'}},
+{id:'i2',n:'概率脑筋急转弯：进阶',tag:'interview',l:{c:'期望步数、赌徒破产、最优停止。考察逻辑推理而非记忆。',e:'公平骰子，连续掷到6需要几步？期望=6步（几何分布）',code:'import random\nsteps=[]\nfor _ in range(100000):\n    n=0\n    while True:\n        n+=1\n        if random.randint(1,6)==6: break\n    steps.append(n)\nprint(f"期望步数: {sum(steps)/len(steps):.3f}")'}},
+{id:'i3',n:'心算训练 Mental Math',tag:'interview',l:{c:'Optiver、Jane Street要求在压力下快速准确计算。每天10分钟练习。',e:'37×43=？用(40-3)(40+3)=1600-9=1591',code:'import random\nfor _ in range(5):\n    a,b=random.randint(10,99),random.randint(10,99)\n    print(f"{a} × {b} = {a*b}")'}},
+{id:'i4',n:'市场微观结构问答',tag:'interview',l:{c:'做市商如何定价？订单流毒性是什么？为什么bid-ask spread存在？',e:'"不活跃小盘股的price spread应该比活跃大盘股宽还是窄？为什么？"',code:'# price spread = 补偿做市商承担风险的成本\n# 库存风险 + 逆向选择风险 + 订单处理成本\n# 不活跃股票：库存风险高 → 价差宽\nprint("理解原理比记答案重要")'}},
+{id:'i5',n:'情景定价题：期权直觉',tag:'interview',l:{c:'不用Black-Scholes，用直觉定价。面试官要看思维框架，不是答案。',e:'"欧式看涨期权，到期1年，标的100，执行价100，波动率20%，大概值多少？"',code:'import numpy as np\ndef mc_call(S,K,sigma,T,sims=100000):\n    z=np.random.normal(0,1,sims)\n    ST=S*np.exp(-0.5*sigma**2*T+sigma*np.sqrt(T)*z)\n    return np.maximum(ST-K,0).mean()\nprint(f"期权价格约: {mc_call(100,100,0.2,1):.2f}")'}},
+{id:'i6',n:'行为面试：讲交易经历',tag:'interview',l:{c:'STAR框架：Situation→Task→Action→Result。结合MT5真实交易经历回答。',e:'你的Pine Script从第1版到第10版的迭代过程，就是最好的故事材料',code:'# 准备3个故事：\n# 1. 一次成功的交易决策（强调过程，不是运气）\n# 2. 一次亏损后的反思和改进\n# 3. 如何用数据推翻自己的直觉偏见\nprint("故事比公式更打动面试官")'}}
+]}
+];
+
+const P=[
+{id:'p1',title:'Kelly Position Visualizer',phase:'P1',color:'#4A7FE8',status:'prog',desc:'用Python实现Kelly公式，可视化不同仓位策略的长期资金曲线对比，量化破产风险。',skills:['Kelly公式','NumPy','Matplotlib','蒙特卡洛'],outcome:'简历上第一个量化项目，展示概率直觉和Python能力',steps:['实现Kelly公式计算器（已完成）','用循环模拟500次交易','比较0.1x/0.5x/1x/2x Kelly的资金曲线','计算每种策略的破产概率','用matplotlib画对比图','写100字英文项目说明']},
+{id:'p2',title:'XAUUSD Trade History Analysis',phase:'P1',color:'#2D9E6B',status:'todo',desc:'用Python分析MT5账户真实交易记录，计算所有绩效指标，用Kelly公式反推最优仓位。',skills:['Pandas','绩效指标','真实数据','Kelly应用'],outcome:'把真实交易经验变成量化证据，面试时有据可依',steps:['从MT5导出交易历史CSV','用Pandas读取和清洗数据','计算胜率、盈亏比、期望值、夏普比率、最大回撤','用Kelly公式计算历史最优仓位','对比实际仓位和Kelly仓位','生成PDF报告']},
+{id:'p3',title:'Systematic Backtesting Framework',phase:'P2',color:'#E87D3E',status:'todo',desc:'从零搭建完整回测引擎，包含数据获取、信号生成、仓位管理、绩效评估全流程。',skills:['回测设计','yfinance','OOP','风险管理'],outcome:'展示系统化思维和软件工程能力',steps:['设计Strategy基础类','实现数据获取模块','实现信号生成接口','实现Kelly仓位管理','实现绩效计算模块','测试均线交叉策略','Pine Script策略逻辑Python复现']},
+{id:'p4',title:'Gold Multi-Factor Research',phase:'P2',color:'#9B6FD4',status:'todo',desc:'寻找能预测黄金价格的统计因子，用严格方法验证有效性，产出英文研究报告。',skills:['因子研究','回归分析','统计检验','研究写作'],outcome:'量化研究员核心能力展示，最接近真实工作内容',steps:['收集候选因子：DXY、实际利率、VIX、动量','对每个因子做统计检验','用OLS回归量化因子暴露','建立多因子线性模型','样本外验证','写英文研究报告（3-5页）']},
+{id:'p5',title:'Options Pricing & Vol Surface',phase:'P3',color:'#E84A6F',status:'todo',desc:'实现Black-Scholes模型，分析隐含波动率微笑，理解市场对尾部风险的定价。',skills:['期权理论','BS模型','隐含波动率','蒙特卡洛'],outcome:'进入量化研究和衍生品交易领域的核心项目',steps:['实现Black-Scholes定价公式','实现Greeks计算','用二分法求隐含波动率','下载真实期权链数据','画出波动率微笑曲线','分析虚值看跌期权为何更贵']},
+{id:'p6',title:'Full Quant Research Paper',phase:'P3',color:'#E87D3E',status:'todo',desc:'整合所有项目，写成专业量化研究报告。直接作为研究生申请的Writing Sample。',skills:['研究写作','数据分析','可视化','英文学术写作'],outcome:'直接放进研究生申请材料的核心研究样本',steps:['选定最好的一个策略','重新用学术标准复现','写完整英文论文（10页）','上传到GitHub','在申请文书中详细描述']}
+];
+
+const R=[
+{title:'Trading Internship — California Electricity Market',desc:'已有。强调：量化分析，P&L追踪，做市商逻辑理解，实际交易决策。你最强的差异化资产。',status:'done',tip:'准备3个具体决策故事，说清楚如何用数据驱动判断'},
+{title:'XAUUSD Systematic Trading Record',desc:'MT5账户真实交易。项目2完成后转化为量化绩效数据：夏普比率、胜率、Kelly分析。',status:'prog',tip:'不要说"我做过外汇交易"，要说"有N个月系统化交易记录，夏普X，胜率Y%"'},
+{title:'Kelly Position Visualizer (Project 1)',desc:'Python实现，GitHub上线。展示概率直觉、Kelly公式理解、可视化能力。',status:'prog',tip:'代码要整洁，README写清楚，让面试官能直接跑起来'},
+{title:'XAUUSD Trade Analysis (Project 2)',desc:'把真实交易记录转化为量化报告。你独有的数据，没人和你一样。',status:'todo',tip:'这个项目是你最独特的资产'},
+{title:'Backtesting Framework (Project 3)',desc:'展示软件工程能力和系统化思维。',status:'todo',tip:'代码结构比策略表现更重要'},
+{title:'Quant Research Paper (Projects 4+6)',desc:'学术级研究报告，直接作为研究生申请Writing Sample。哥大ERM、NYU必备。',status:'todo',tip:'这是申请材料里最重要的一份文件'},
+{title:'Python / Quant Tech Stack',desc:'NumPy, Pandas, Matplotlib, statsmodels, scipy, yfinance',status:'prog',tip:'GitHub要有绿色格子，每天commit一点'},
+{title:'English Resume (Quant Focus)',desc:'针对美国研究生申请和量化实习的单页简历。',status:'prog',tip:'GPA不高，项目和实习经历要格外突出；用数字量化每一个成就'}
+];
+
+let done=new Set(['p1','p2','py1']),notes={},projNotes={},journals=[],openSubj=new Set(),openUnits=new Set(),openProj=new Set(),filterTag='all';
+
+function load(){try{const d=JSON.parse(localStorage.getItem('kq3')||'{}');if(d.done)done=new Set(d.done);if(d.notes)notes=d.notes;if(d.projNotes)projNotes=d.projNotes;if(d.journals)journals=d.journals;if(d.openSubj)openSubj=new Set(d.openSubj);}catch(e){}}
+function save(){try{localStorage.setItem('kq3',JSON.stringify({done:[...done],notes,projNotes,journals,openSubj:[...openSubj]}));}catch(e){}}
+function totalT(){return C.reduce((a,s)=>a+s.topics.length,0);}
+function updateStats(){
+  const t=totalT(),d=done.size,p=Math.round(d/t*100);
+  document.getElementById('h-pct').textContent=p+'%';
+  document.getElementById('h-pct2').textContent=p+'%';
+  document.getElementById('h-bar').style.width=p+'%';
+  document.getElementById('h-done').textContent=d;
+  document.getElementById('h-proj').textContent=P.filter(x=>x.status==='prog').length;
+  const days=Math.max(1,Math.round((new Date()-new Date('2026-06-27'))/86400000)+1);
+  document.getElementById('h-days').textContent=days;
+}
+function stab(tag,el){filterTag=tag;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));el.classList.add('on');renderC();}
+function renderC(){
+  document.getElementById('subj-list').innerHTML=C.map(s=>{
+    const ft=filterTag==='all'?s.topics:s.topics.filter(t=>t.tag===filterTag);
+    if(!ft.length)return'';
+    const d=s.topics.filter(t=>done.has(t.id)).length,pct=Math.round(d/s.topics.length*100),isOpen=openSubj.has(s.id);
+    return`<div class="subj"><div class="subj-header" onclick="togS('${s.id}')"><div class="subj-icon" style="background:${s.color}20">${s.icon}</div><div class="subj-info"><div class="subj-name">${s.title}</div><div class="subj-meta">${s.desc} · ${d}/${s.topics.length}</div></div><div class="subj-pct">${pct}%</div></div><div class="subj-bar"><div class="subj-bar-fill" style="width:${pct}%;background:${s.color}"></div></div><div class="topics ${isOpen?'open':''}">${ft.map(t=>{const uO=openUnits.has(t.id),dn=done.has(t.id);return`<div class="topic" onclick="togT('${t.id}')"><div class="chk ${dn?'done':''}"></div><span class="topic-name ${dn?'done':''}">${t.n}</span><span class="tag tag-${t.tag}">${t.tag==='interview'?'面试题':t.tag==='project'?'项目':'基础'}</span></div>${t.l?`<button class="expand-btn" onclick="event.stopPropagation();togU('${t.id}')">${uO?'▲ 收起':'▼ 展开教材 + 笔记'}</button><div class="lesson ${uO?'open':''}" id="lb-${t.id}"><div class="lsec">概念</div><div class="ltext">${t.l.c}</div><div class="lsec">例子</div><div class="ltext">${t.l.e}</div><div class="lsec">代码</div><pre class="lcode">${t.l.code}</pre><div class="lsec">我的笔记</div><textarea class="note-area" id="note-${t.id}" placeholder="写下你的理解、问题、或者自己的例子...">${notes[t.id]||''}</textarea><button class="save-btn" onclick="saveNote('${t.id}')">保存笔记</button><span class="saved-msg" id="ns-${t.id}">已保存 ✓</span></div>`:''}`;}).join('')}</div></div>`;
+  }).join('');
+}
+function renderP(){
+  document.getElementById('proj-list').innerHTML=P.map(p=>{const isO=openProj.has(p.id);return`<div class="proj"><div class="proj-header" onclick="togP('${p.id}')"><div class="proj-num" style="background:${p.color}20;color:${p.color}">${p.phase}</div><div class="proj-info"><div class="proj-title">${p.title}</div><div class="proj-desc">${p.desc}</div><div class="proj-tags">${p.skills.map(s=>`<span class="tag tag-core">${s}</span>`).join('')}</div></div><span class="proj-status ${p.status==='done'?'st-done':p.status==='prog'?'st-prog':'st-todo'}">${p.status==='done'?'完成':p.status==='prog'?'进行中':'未开始'}</span></div><div class="proj-body ${isO?'open':''}" id="pb-${p.id}"><div class="sec-label2">目标产出</div><div class="ltext">${p.outcome}</div><div class="sec-label2" style="margin-top:12px">步骤</div><ul class="step-list">${p.steps.map(s=>`<li class="step">${s}</li>`).join('')}</ul><div class="sec-label2" style="margin-top:12px">进度笔记 & 代码</div><textarea class="proj-note" id="pn-${p.id}" placeholder="粘贴你的代码、记录进度、写下遇到的问题...">${projNotes[p.id]||''}</textarea><button class="save-btn" style="margin-top:6px" onclick="saveProjNote('${p.id}')">保存</button><span class="saved-msg" id="pns-${p.id}">已保存 ✓</span></div></div>`;}).join('');
+}
+function renderJ(){const l=document.getElementById('j-list');if(!journals.length){l.innerHTML='<div class="empty">还没有记录。今天学了什么？写下来。</div>';return;}l.innerHTML=[...journals].reverse().map(j=>`<div class="j-entry"><div class="j-date">${j.date} <span class="tag tag-core">${j.tag}</span></div><div class="j-text">${j.text}</div></div>`).join('');}
+function renderR(){document.getElementById('res-list').innerHTML=R.map(r=>`<div class="res-card"><div class="res-title">${r.title}</div><div class="res-desc">${r.desc}</div><div style="margin-top:8px"><span class="proj-status ${r.status==='done'?'st-done':r.status==='prog'?'st-prog':'st-todo'}">${r.status==='done'?'已有':r.status==='prog'?'进行中':'待开始'}</span></div><div class="res-tip">💡 ${r.tip}</div></div>`).join('');}
+function togS(id){if(openSubj.has(id))openSubj.delete(id);else openSubj.add(id);save();renderC();}
+function togT(id){if(done.has(id))done.delete(id);else done.add(id);save();updateStats();renderC();}
+function togU(id){if(openUnits.has(id))openUnits.delete(id);else openUnits.add(id);renderC();}
+function togP(id){if(openProj.has(id))openProj.delete(id);else openProj.add(id);renderP();}
+function saveNote(id){const el=document.getElementById('note-'+id);if(el){notes[id]=el.value;save();}const ns=document.getElementById('ns-'+id);if(ns){ns.style.display='inline';setTimeout(()=>ns.style.display='none',2000);}}
+function saveProjNote(id){const el=document.getElementById('pn-'+id);if(el){projNotes[id]=el.value;save();}const ns=document.getElementById('pns-'+id);if(ns){ns.style.display='inline';setTimeout(()=>ns.style.display='none',2000);}}
+function saveJ(){const text=document.getElementById('j-text').value.trim();if(!text)return;const tag=document.getElementById('j-tag').value;const date=new Date().toLocaleDateString('zh-CN',{month:'long',day:'numeric',weekday:'short'});journals.push({text,tag,date});document.getElementById('j-text').value='';save();updateStats();renderJ();}
+load();renderC();renderP();renderJ();renderR();updateStats();
+</script>
+</body>
+</html>
